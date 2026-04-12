@@ -94,14 +94,10 @@ const AddEventDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button 
-          variant="ghost" 
-          type="button"
-          className='bg-gray-200 w-full'
-        >
-          <IconPlus size={32} />
+        <span className='flex-center justify-center bg-gray-200 w-full gap-2 py-2 rounded-sm'>
+          <IconPlus size={20} />
           Adauga un Event nou
-        </Button> 
+        </span>
       </DialogTrigger>
       <DialogContent className='max-h-120 overflow-y-scroll'>
         <DialogHeader>

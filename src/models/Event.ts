@@ -9,7 +9,8 @@ const EventSchema = new Schema<IEvent>(
   {
     title: {
       type: String,
-      required: true
+      required: true,
+      index: true,
     },
     titleTranslation: {
       type: String,
@@ -22,7 +23,8 @@ const EventSchema = new Schema<IEvent>(
     },
     location: {
       type: String,
-      required: true
+      required: true,
+      index: true,
     },
     date: {
       type: Date,

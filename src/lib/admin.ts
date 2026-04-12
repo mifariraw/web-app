@@ -1,5 +1,4 @@
 import { formSchema } from "@src/app/admin/dashboard/AddEventDialog";
-import { IEvent } from "@src/models/interfaces";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -10,7 +9,7 @@ interface ApiResponse<T> {
 }
 
 export async function loginAdmin(email: string, password: string) {
-  const res = await fetch("/api/login", {
+  const res = await fetch("/api/admin/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -30,7 +29,7 @@ export async function loginAdmin(email: string, password: string) {
 export async function createNewEvent(data: z.infer<typeof formSchema>) {
   const uploadedUrl = await uploadImage(data.coverImageUrl, data.type)
   
-  const res = await fetch("/api/create-event", {
+  const res = await fetch("/api/admin/create-event", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -53,7 +52,7 @@ export async function createNewEvent(data: z.infer<typeof formSchema>) {
 }
 
 export async function changePassword(oldPassword: string, newPassword: string) {
-  const res = await fetch("/api/change-password", {
+  const res = await fetch("/api/admin/change-password", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -71,7 +70,7 @@ export async function changePassword(oldPassword: string, newPassword: string) {
 }
 
 export async function logoutAdmin() {
-  const res = await fetch("/api/logout", {
+  const res = await fetch("/api/admin/logout", {
     method: "POST",
   })
 
@@ -89,7 +88,7 @@ export async function uploadImage(file: File, folder: string): Promise<string> {
   formData.append("file", file);
   formData.append("folder", folder);
 
-  const res = await fetch("/api/upload-image", {
+  const res = await fetch("/api/admin/upload-image", {
     method: "POST",
     body: formData,
   });

@@ -4,7 +4,7 @@ export default function Home() {
     <div className="flex flex-col flex-1 items-center justify-center font-sans dark:bg-black">
       <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 dark:bg-black sm:items-start">
       
-        <p className="text-yellow-500">meh</p>
+        <a href="/login" className="text-yellow-500 z-10">meh</a>
       </main>
     </div>
   );

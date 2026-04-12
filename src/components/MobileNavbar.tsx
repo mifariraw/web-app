@@ -1,7 +1,10 @@
+"use client"
+
 import React from 'react'
 import Image from "next/image";
 import logo from "@public/images/White.svg";
 import StaggeredMenu from './StaggeredMenu';
+import { usePathname } from "next/navigation";
 
 const menuItems = [
   { label: 'Home', link: '/' },
@@ -21,6 +24,12 @@ const socialItems = [
 
 
 const MobileNavbar = () => {
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <div style={{ height: '100vh', background: 'transparent' }} className='w-full h-full absolute lg:hidden'>
       <StaggeredMenu

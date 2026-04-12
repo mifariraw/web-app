@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const Login = () => {
   return (
-    <div className='px-8 flex flex-col items-center justify-center h-[calc(100vh-80px)]!'>
+    <div className='px-8 pt-20 flex flex-col items-center justify-center h-[calc(100vh-80px)]!'>
       <LoginForm />
 
       <span className='flex items-center gap-2 mt-16 opacity-70 select-none'>

@@ -133,6 +133,14 @@
   }
 }
 
+.bgmain {
+  background-color: #5227FF;
+}
+
+.textmain {
+  color: #5227FF;
+}
+
 .flex-center {
   display: flex;
   align-items: center;

@@ -32,7 +32,7 @@ export default function RootLayout({
     >
       <body className="flex flex-col bg-black overflow-x-hidden">
         <MobileNavbar />
-        <div className="flex flex-col min-h-full pt-20 w-dvw overflow-x-hidden">
+        <div className="flex flex-col min-h-full w-dvw overflow-x-hidden">
           {children}
 
           <Toaster

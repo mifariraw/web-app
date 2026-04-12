@@ -1,0 +1,94 @@
+"use client"
+
+import * as React from "react"
+
+import { NavDocuments } from "@src/components/nav-documents"
+import { NavMain } from "@src/components/nav-main"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@src/components/ui/sidebar"
+import { 
+  IconDashboard, IconGlassChampagne, 
+  IconHandLoveYou, IconHome, 
+  IconInfoCircle, IconMessage2, 
+  IconPaint, IconUser 
+} from "@tabler/icons-react"
+import { CommandIcon } from "lucide-react"
+
+const data = {
+  navMain: [
+    {
+      title: "Dashboard",
+      url: "#",
+      icon: <IconDashboard />,
+    },
+  ],
+  mainSiteLinks: [
+    {
+      name: "Home",
+      url: "/",
+      icon: <IconHome />,
+    },
+    {
+      name: "Despre",
+      url: "/despre",
+      icon: <IconInfoCircle />,
+    },
+    {
+      name: "Contact",
+      url: "/contact",
+      icon: <IconMessage2 />,
+    },
+    {
+      name: "Evenimente",
+      url: "/evenimente",
+      icon: <IconGlassChampagne />,
+    },
+    {
+      name: "Concerte & Festivaluri",
+      url: "/concerte",
+      icon: <IconHandLoveYou />,
+    },
+    {
+      name: "Proiecte personale",
+      url: "/proiecte-personale",
+      icon: <IconUser />,
+    },
+    {
+      name: "Portrete",
+      url: "/portrete",
+      icon: <IconPaint />,
+    },
+  ],
+}
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  return (
+    <Sidebar collapsible="offcanvas" {...props}>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="data-[slot=sidebar-menu-button]:p-1.5!"
+            >
+              <a href="#">
+                <CommandIcon className="size-5!" />
+                <span className="text-base font-semibold">MifariRaw</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+      <SidebarContent>
+        <NavMain items={data.navMain} />
+        <NavDocuments items={data.mainSiteLinks} />
+      </SidebarContent>
+    </Sidebar>
+  )
+}

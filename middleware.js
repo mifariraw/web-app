@@ -6,20 +6,26 @@ const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 export default async function proxy(req) {
   const token = req.cookies.get("admin_token")?.value;
   const { pathname } = req.nextUrl;
+  
+  if (pathname.startsWith("/admin") && !token) {
+    return NextResponse.redirect(new URL("/login?expired=true", req.url));
+  }
 
-  if (pathname.startsWith("/admin")) {
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-
+  if (token) {
     try {
       const { payload } = await jwtVerify(token, secret);
-      
+
+      if (pathname === "/login") {
+        return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+      }
+
       return NextResponse.next();
-      
     } catch (error) {
       console.error("JWT Verification failed:", error);
-      return NextResponse.redirect(new URL("/login", req.url));
+      
+      if (pathname !== "/login") {
+        return NextResponse.redirect(new URL("/login", req.url));
+      }
     }
   }
 

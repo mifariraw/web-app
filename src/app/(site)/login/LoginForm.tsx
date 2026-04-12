@@ -21,10 +21,10 @@ import {
   FieldLabel,
 } from "@src/components/ui/field"
 import { Input } from "@src/components/ui/input"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { IconLoader2 } from "@tabler/icons-react"
 import { loginAdmin } from "@src/lib/admin"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
  
 export const formSchema = z.object({
   email: z.email("Enter a valid email address"),
@@ -35,6 +35,9 @@ export const formSchema = z.object({
 })
 
 export function LoginForm() {
+  const searchParams = useSearchParams()
+  const expired = searchParams.get("expired")
+
   const router = useRouter()
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false)
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,6 +57,14 @@ export function LoginForm() {
         router.replace("/admin/dashboard")
       })
   }
+
+  useEffect(() => {
+    if (expired === "true") {
+      toast.error("Sesiunea a expirat")
+      
+      window.history.replaceState({}, "", "/login")
+    }
+  }, [expired])
 
   return (
     <Card className="w-full sm:max-w-md z-10">
@@ -126,6 +137,7 @@ export function LoginForm() {
           </Button>
           <Button 
             type="submit" 
+            disabled={isLoggingIn}
             form="form-login"
             className="flex-3/4 bg-[#5227FF] text-white hover:bg-main-accent/90"
           >

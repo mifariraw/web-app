@@ -40,10 +40,10 @@ export async function POST(req: Request) {
     const token = await new SignJWT({ userId: admin._id.toString() })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
-      .setExpirationTime("14d") // This is the JWT expiry
+      .setExpirationTime("14d")
       .sign(secret);
 
-    const res = NextResponse.json({ message: "Success" });
+    const res = NextResponse.json({ message: "Success" }, { status: 200 });
 
     res.cookies.set("admin_token", token, {
       httpOnly: true,
@@ -57,9 +57,11 @@ export async function POST(req: Request) {
     
   } catch (error: unknown) {
     console.error("Route Error:", error);
-    return NextResponse.json(
+    const res = NextResponse.json(
       { message: "Internal Server Error", error: (error as Error).message },
       { status: 500 }
     );
+    
+    return res;
   }
 }

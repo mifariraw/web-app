@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@src/components/ui/button"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -8,7 +7,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@src/components/ui/sidebar"
-import { CirclePlusIcon, MailIcon } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export function NavMain({
   items,
@@ -19,15 +19,17 @@ export function NavMain({
     icon?: React.ReactNode
   }[]
 }) {
+  const pathname = usePathname()
+
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
+              <SidebarMenuButton tooltip={item.title} disabled={pathname.startsWith(item.url)}>
                 {item.icon}
-                <span>{item.title}</span>
+                <Link href={item.url}>{item.title}</Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

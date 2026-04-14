@@ -14,6 +14,7 @@ import {
 import { IconLoader2, IconTrash } from '@tabler/icons-react'
 import { Button } from '@src/components/ui/button'
 import { deleteEvent } from '@src/lib/admin'
+import { useRouter } from 'next/navigation'
 
 interface DeleteEventDialogProps {
   id: string;
@@ -22,6 +23,7 @@ interface DeleteEventDialogProps {
 }
 
 const DeleteEventDialog = ({ id, folder, title }: DeleteEventDialogProps) => {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [isDeleteingEvent, setIsDeleteingEvent] = useState(false)
 
@@ -32,6 +34,7 @@ const DeleteEventDialog = ({ id, folder, title }: DeleteEventDialogProps) => {
       .finally(() => {
         setIsDeleteingEvent(false)
         setOpen(false)
+        router.replace("/admin/dashboard")
       })
   }
 

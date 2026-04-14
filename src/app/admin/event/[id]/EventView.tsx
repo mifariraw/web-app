@@ -3,12 +3,13 @@
 import EventSkeleton from '@src/components/skeletons/EventSkeleton'
 import { Separator } from '@src/components/ui/separator'
 import { useEvents } from '@src/hooks/useEvents'
-import { IconCalendarEvent, IconLanguage, IconLibraryPhoto, IconMapPin } from '@tabler/icons-react'
+import { IconCalendarEvent, IconLanguage, IconLibraryPhoto, IconMapPin, IconReload } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { ro } from 'date-fns/locale'
 import Image from 'next/image'
 import dynamic from 'next/dynamic';
 import Gallery from './EventGallery'
+import { Button } from '@src/components/ui/button'
 
 const EditEventDialog = dynamic(() => import("./EditEventDialog"), {
   loading: () => <div className="w-8 h-8" />,
@@ -31,7 +32,7 @@ const ImageUploader = dynamic(() => import("./MultipleImageUploader"), {
 });
 
 const EventView = ({ id }: { id: string }) => {
-  const { events, loading } = useEvents("event", `/api/admin/event/${id}`);
+  const { events, reload, loading } = useEvents("event", `/api/admin/event/${id}`);
   
   const currentEvent = events[0];
 
@@ -40,7 +41,15 @@ const EventView = ({ id }: { id: string }) => {
   }
 
   return (
-    <div className='p-4 h-full overflow-y-auto'>
+    <div className='p-4 h-full overflow-y-auto relative'>
+      <Button
+        variant="outline"
+        className='absolute top-4 left-4'
+        onClick={reload}
+      >
+        <IconReload />
+      </Button>
+
       <section className='w-full flex flex-col items-center justify-center gap-4'>
         <div className='relative w-3/5'>
           <Image
@@ -100,8 +109,11 @@ const EventView = ({ id }: { id: string }) => {
           />
         </div>
 
-
-        <Gallery photos={currentEvent.images || []} />
+        <Gallery 
+          id={currentEvent._id.toString()} 
+          photos={currentEvent.images || []} 
+          folder={currentEvent.type} 
+        />
       </section>
     </div>
   );

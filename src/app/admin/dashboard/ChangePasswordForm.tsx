@@ -45,6 +45,7 @@ const ChangePasswordForm = () => {
     changePassword(data.oldPassword, data.newPassword)
       .finally(() => {
         setIsChangingPassword(false)
+        form.reset()
       })
   }
 

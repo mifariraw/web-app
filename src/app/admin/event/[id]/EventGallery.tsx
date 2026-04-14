@@ -1,9 +1,24 @@
 "use client";
 
-import { IconPhotoCancel } from "@tabler/icons-react";
+import { Button } from "@src/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@src/components/ui/dialog"
+import { cn, downloadImagesAsZip, ImageForZip } from "@src/lib/utils";
+import { IconDownload, IconLoader2, IconPhotoCancel, IconSquare, IconSquareCheck, IconTrash } from "@tabler/icons-react";
 import justifiedLayout from "justified-layout";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import "yet-another-react-lightbox/styles.css";
+import Lightbox from "yet-another-react-lightbox";
+import { deleteEventImages } from "@src/lib/admin";
 
 export type EventPhoto = {
   url: string;
@@ -12,7 +27,16 @@ export type EventPhoto = {
   height: number;
 };
 
-export default function Gallery({ photos }: { photos: EventPhoto[] }) {
+interface GalleryProps {
+  id: string;
+  photos: EventPhoto[];
+  folder: string;
+}
+
+export default function Gallery({ id, photos, folder }: GalleryProps) {
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+  const [index, setIndex] = useState<number | null>(null);
+  const [isDeleteing, setIsDeleteing] = useState<boolean>(false)
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
@@ -33,6 +57,19 @@ export default function Gallery({ photos }: { photos: EventPhoto[] }) {
     );
   }, [photos, width]);
 
+  const handleDelete = () => {
+    setIsDeleteing(true)
+
+    const images = photos.filter(ph => selected.has(ph.publicId))
+    const urls = images.map(i => i.publicId)
+
+    deleteEventImages(id, urls, folder)
+      .finally(() => {
+        setIsDeleteing(false)
+        setDialogOpen(false)
+      })
+  }
+
   const toggle = (id: string) => {
     setSelected((prev) => {
       const next = new Set(prev);
@@ -44,6 +81,37 @@ export default function Gallery({ photos }: { photos: EventPhoto[] }) {
       return next;
     });
   };
+
+  const toggleAll = (action: string) => {
+    for (const photo of photos) {
+      setSelected((prev) => {
+        const next = new Set(prev);
+        if (action === "toggle") {
+          if (!next.has(photo.publicId)) {
+            next.add(photo.publicId)
+          } 
+        } else if (action === "untoggle") {
+          if (next.has(photo.publicId)) {
+            next.delete(photo.publicId)
+          } 
+        }
+
+        return next
+      })
+    }
+  }
+
+  const manageDownload = () => {
+    const urls: ImageForZip[] = []
+
+    for (const photo of photos) {
+      if (selected.has(photo.publicId)) {
+        urls.push({ url: photo.url })
+      }
+    }
+
+    downloadImagesAsZip(urls)
+  }
 
   useEffect(() => {
     const updateWidth = () => {
@@ -68,47 +136,116 @@ export default function Gallery({ photos }: { photos: EventPhoto[] }) {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="relative h-100 overflow-y-scroll mt-2"
-    >
-      {layout?.boxes.map((box, i) => {
-        const photo = photos[i];
-        const isSelected = selected.has(photo.publicId);
+    <>
+      <div className="flex-center-between my-2">
+        {selected.size === photos.length ? (
+          <IconSquareCheck 
+            size={20}
+            onClick={() => toggleAll("untoggle")}
+          />
+        ) : (
+          <IconSquare 
+            size={20}
+            onClick={() => toggleAll("toggle")}
+          />
+        )}
 
-        return (
-          <div
-            key={photo.publicId}
-            style={{
-              position: "absolute",
-              top: box.top,
-              left: box.left,
-              width: box.width,
-              height: box.height,
-            }}
-            onClick={() => toggle(photo.publicId)}
-            className="cursor-pointer group"
-          >
-            <Image
-              src={photo.url}
-              alt=""
-              fill
-              className={`object-cover rounded ${
-                isSelected ? "opacity-70 scale-95" : ""
-              }`}
-            />
+        <Lightbox
+          open={index !== null}
+          close={() => setIndex(null)}
+          index={index ?? 0}
+          slides={photos.map((p) => ({
+            src: p.url,
+            width: p.width,
+            height: p.height,
+          }))}
+        />
 
-            {/* Overlay */}
-            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100">
-              ⬇️
+        <div className="flex-center gap-4">
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger 
+              asChild 
+              disabled={selected.size === 0}
+              className={cn(selected.size === 0 && "pointer-events-none opacity-40")}
+            >
+              <IconTrash size={20} className="text-destructive" />
+            </DialogTrigger>
+            <DialogContent className='max-h-120 overflow-y-scroll'>
+              <DialogHeader>
+                <DialogTitle>Sterge fotografii</DialogTitle>
+              </DialogHeader>
+              <DialogDescription className={"flex flex-col gap-2"}>
+                Urmeaza sa stergi aceste fotografii. Actiunea este permanenta
+              </DialogDescription>
+              <DialogFooter>
+                <DialogClose className="cursor-pointer text-gray-600 rounded-sm px-4 py-1 border"> 
+                  Anuleaza
+                </DialogClose>
+                <Button
+                  disabled={isDeleteing}
+                  onClick={handleDelete}
+                  className="cursor-pointer text-white bg-destructive rounded-sm px-4 py-1 border"
+                >
+                  {isDeleteing ? (
+                    <IconLoader2 className="rotate" />
+                  ) : (
+                    <span>Sterge</span>
+                  )}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <IconDownload 
+            size={20} 
+            className={cn(selected.size === 0 && "pointer-events-none opacity-40")}
+            onClick={manageDownload}
+          />
+        </div>
+      </div>
+      <div
+        ref={containerRef}
+        className="relative h-100 overflow-y-scroll mt-2"
+      >
+        {layout?.boxes.map((box, i) => {
+          const photo = photos[i];
+          const isSelected = selected.has(photo.publicId);
+
+          return (
+            <div
+              key={photo.publicId}
+              style={{
+                position: "absolute",
+                top: box.top,
+                left: box.left,
+                width: box.width,
+                height: box.height,
+              }}
+              onClick={() => toggle(photo.publicId)}
+              className="cursor-pointer group"
+            >
+              <Image
+                src={photo.url}
+                alt=""
+                fill
+                className={`object-cover rounded-md transition-transform duration-200 ease-in-out ${
+                  isSelected ? "opacity-70 scale-95" : ""
+                }`}
+                onClick={() => setIndex(i)}
+              />
+
+              {/* Overlay */}
+              <div className="absolute top-1 let-1 ml-2 opacity-100 group-hover:opacity-100">
+                {isSelected ? (
+                  <IconSquareCheck className="bg-black text-white" />
+                ) : (
+                  <IconSquare className="text-white bg-black" />
+                )}
+              </div>
             </div>
-
-            {isSelected && (
-              <div className="absolute inset-0 border-4 border-blue-500 rounded" />
-            )}
-          </div>
-        );
-      })}
-    </div>
+          );
+        })}
+      </div>
+    </>
   );
 }

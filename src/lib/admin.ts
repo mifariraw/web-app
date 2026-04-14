@@ -170,6 +170,28 @@ export async function uploadEventImages(
     toast.error(eventData.message || "Eroare");
   }
 
+  toast.success("Imaginile au fost incarcate");
+}
+
+export async function deleteEventImages(
+  id: string,
+  images: string[], 
+  folder: string,
+) {
+  const res = await fetch(`/api/admin/event/${id}/delete-images`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ images, folder }),
+  })
+
+  const eventData: ApiResponse<unknown> = await res.json();
+  
+  if (!res.ok) {
+    toast.error(eventData.message || "Eroare");
+  }
+
   toast.success("Eventul a fost actualizat");
 }
 

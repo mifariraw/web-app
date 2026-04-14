@@ -33,6 +33,12 @@ const Dashboard = () => {
         type='personal_projects'
       />
 
+      <div className='mt-6' />
+      <EventCategorySection 
+        title='Portrete'
+        type='portraits'
+      />
+
       <Separator className='my-4' />
       <h2 className='text-lg font-semibold mb-2'>Schimba Parola</h2>
       <ChangePasswordForm />

@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -51,4 +53,29 @@ export const getCloudinaryPublicId = (profileImage: string) => {
   const lastPoint = profileImage.lastIndexOf(".")
 
   return profileImage.slice(lastSlash + 1, lastPoint)
+}
+
+export type ImageForZip = {
+  url: string;
+  name?: string;
+};
+
+export async function downloadImagesAsZip(images: ImageForZip[]) {
+  const zip = new JSZip();
+
+  await Promise.all(
+    images.map(async (img, index) => {
+      const response = await fetch(img.url);
+      const blob = await response.blob();
+
+      const fileName =
+        img.name || `image-${index}.${blob.type.split("/")[1]}`;
+
+      zip.file(fileName, blob);
+    })
+  );
+
+  const content = await zip.generateAsync({ type: "blob" });
+
+  saveAs(content, "photos.zip");
 }

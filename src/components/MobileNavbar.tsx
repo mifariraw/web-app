@@ -1,7 +1,6 @@
 "use client"
 
 import React from 'react'
-import Image from "next/image";
 import logo from "@public/images/White.svg";
 import StaggeredMenu from './StaggeredMenu';
 import { usePathname } from "next/navigation";
@@ -31,7 +30,10 @@ const MobileNavbar = () => {
   }
 
   return (
-    <div style={{ height: '100vh', background: 'transparent' }} className='w-full h-full absolute lg:hidden'>
+    <div 
+      style={{ height: '100vh', background: 'transparent' }} 
+      className='w-full h-full absolute lg:hidden'
+    >
       <StaggeredMenu
         position="right"
         items={menuItems}

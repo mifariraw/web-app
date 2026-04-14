@@ -30,8 +30,22 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased overflow-x-hidden`}
     >
-      <body className="flex flex-col bg-black overflow-x-hidden">
+      <body className="flex flex-col bg-black relative overflow-hidden overflow-x-hidden">
         <MobileNavbar />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          controls={false}
+          disablePictureInPicture
+          controlsList="nodownload nofullscreen noremoteplayback"
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/50" />
+
         <div className="flex flex-col min-h-full w-dvw overflow-x-hidden">
           {children}
 

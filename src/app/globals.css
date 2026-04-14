@@ -117,6 +117,13 @@
   --sidebar-border: oklch(1 0 0 / 10%);
 }
 
+@font-face {
+  font-family: "Nohemi";
+  src: url("/fonts/Nohemi-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
 * {
   font-family: sans-serif
 }
@@ -131,6 +138,10 @@
   html {
     @apply font-sans;
   }
+}
+
+nextjs-portal {
+  display: none !important;
 }
 
 .bgmain {
@@ -151,6 +162,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.nohemi {
+  font-family: "Nohemi";
+  text-transform: uppercase;
 }
 
 .rotate {

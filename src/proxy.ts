@@ -30,7 +30,6 @@ export default async function proxy(req: NextRequest) {
         if (payload.userId && pathname === "/login") {
           return NextResponse.redirect(new URL("/admin/dashboard", req.url));
         }
-        console.log(payload)
         
         return NextResponse.next();
         

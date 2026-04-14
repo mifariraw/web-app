@@ -1,5 +1,6 @@
 import { IEvent } from '@src/models/interfaces'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 interface EventCardProps {
@@ -8,7 +9,10 @@ interface EventCardProps {
 
 const EventCard = ({ event }: EventCardProps) => {
   return (
-    <div className='flex flex-col items-center gap-2'>
+    <Link 
+      className='flex flex-col items-center gap-2'
+      href={"/admin/event/" + event?._id.toString()}
+    >
       <Image
         src={event.coverImageUrl} 
         width={120}
@@ -17,7 +21,7 @@ const EventCard = ({ event }: EventCardProps) => {
         alt={event.title}
       />
       <span className='font-semibold'>{event.title}</span>
-    </div>
+    </Link>
   )
 }
 

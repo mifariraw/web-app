@@ -43,3 +43,12 @@ export const getCroppedImg = async (imageSrc: string, cropArea: { width: number;
     }, "image/jpeg");
   });
 };
+
+export const getCloudinaryPublicId = (profileImage: string) => {
+  if (!(profileImage.length > 0)) return ""
+
+  const lastSlash = profileImage.lastIndexOf("/")
+  const lastPoint = profileImage.lastIndexOf(".")
+
+  return profileImage.slice(lastSlash + 1, lastPoint)
+}

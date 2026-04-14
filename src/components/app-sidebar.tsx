@@ -13,12 +13,12 @@ import {
   SidebarMenuItem,
 } from "@src/components/ui/sidebar"
 import { 
+  IconAperture,
   IconDashboard, IconGlassChampagne, 
   IconHandLoveYou, IconHome, 
   IconInfoCircle, IconMessage2, 
   IconPaint, IconUser 
 } from "@tabler/icons-react"
-import { CommandIcon } from "lucide-react"
 
 const data = {
   navMain: [
@@ -78,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <a href="#">
-                <CommandIcon className="size-5!" />
+                <IconAperture className="size-5!" />
                 <span className="text-base font-semibold">MifariRaw</span>
               </a>
             </SidebarMenuButton>

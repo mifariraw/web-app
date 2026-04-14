@@ -5,6 +5,16 @@ import mongoose, {
 } from "mongoose";
 import { IEvent } from "./interfaces";
 
+const EventImageSchema = new Schema(
+  {
+    url: { type: String, required: true },
+    publicId: { type: String, required: true },
+    width: { type: Number, required: true },
+    height: { type: Number, required: true },
+  },
+  { _id: true, timestamps: true }
+);
+
 const EventSchema = new Schema<IEvent>(
   {
     title: {
@@ -35,7 +45,7 @@ const EventSchema = new Schema<IEvent>(
       required: true
     },
     images: {
-      type: [String],
+      type: [EventImageSchema],
       default: []
     }
   },

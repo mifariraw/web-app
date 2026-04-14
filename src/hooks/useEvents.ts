@@ -4,7 +4,7 @@ import { IEvent } from "@src/models/interfaces"
 import { useEffect, useState, useCallback } from "react"
 import { useDebounce } from "./useDebounce"
 
-export function useEvents(type: string) {
+export function useEvents(type: string, endpoint: string = "/api/admin/events") {
   const [events, setEvents] = useState<IEvent[]>([])
   const [search, setSearch] = useState("")
   const [loading, setLoading] = useState(false)
@@ -15,7 +15,7 @@ export function useEvents(type: string) {
     setLoading(true)
     try {
       const res = await fetch(
-        `/api/admin/events?type=${type}&search=${debouncedSearch}`
+        `${endpoint}?type=${type}&search=${debouncedSearch}`
       )
       const data = await res.json()
       setEvents(data.events)

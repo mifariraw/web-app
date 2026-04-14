@@ -26,67 +26,43 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@src/components/ui/field"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@src/components/ui/select"
 import { Input } from "@src/components/ui/input"
 import { Button } from "@src/components/ui/button"
-import { IconCalendar, IconLoader2, IconPlus } from '@tabler/icons-react'
-import ImageDropzone from '@src/components/ImageDropzone'
+import { IconCalendar, IconLoader2, IconPencil } from '@tabler/icons-react'
 import { format } from 'date-fns/format'
 import { cn } from '@src/lib/utils'
 import { ro } from 'date-fns/locale'
-import { createNewEvent } from '@src/lib/admin'
+import { IEvent } from '@src/models/interfaces'
+import { updateEvent } from '@src/lib/admin'
 
 export const formSchema = z.object({
   title: z.string().min(1, "Titlul este obligatoriu"),
   titleTranslation: z.string().min(1, "Traducerea este obligatorie"),
-  type: z.enum(
-    ["concert", "event", "personal_project", "portraits"]
-  ),
   location: z.string().min(1, "Locația este obligatorie"),
   date: z.date(),
     // .refine((date) => date > new Date(), "Data trebuie să fie în viitor"),
-  coverImageUrl: z.instanceof(File),
 })
 
-const AddEventDialog = () => {
+const EditEventDialog = ({ event }: { event: IEvent }) => {
   const [open, setOpen] = useState(false)
-  const [isCreatingEvent, setIsCreatingEvent] = useState(false)
+  const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      titleTranslation: "",
-      type: "event",
-      location: "",
-      date: new Date(),
-      coverImageUrl: undefined as unknown as File,
+      title: event?.title || "",
+      titleTranslation: event?.titleTranslation || "",
+      location: event?.location || "",
+      date: event?.date || new Date(),
     },
   })
 
-  const handleImageSelect = (file: File | null) => {
-    if (file) {
-      
-      form.setValue("coverImageUrl", file);
-      form.trigger("coverImageUrl");
-    } else {
-      form.setValue("coverImageUrl", undefined as unknown as File);
-    }
-  };
-
   function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsCreatingEvent(true)
+    setIsUpdatingEvent(true)
 
-    createNewEvent(data)
+    updateEvent(event._id.toString(), data)
       .finally(() => {
-        setIsCreatingEvent(false)
+        setIsUpdatingEvent(false)
         setOpen(false)
       })
   }
@@ -94,30 +70,19 @@ const AddEventDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <span className='flex-center justify-center bg-gray-200 w-full gap-2 py-2 rounded-sm'>
-          <IconPlus size={20} />
-          Adauga un Event nou
+        <span className='flex-center justify-center bg-black text-white hover:text-white w-full gap-2 py-1 rounded-sm'>
+          <IconPencil size={16} />
+          Editeaza
         </span>
       </DialogTrigger>
       <DialogContent className='max-h-120 overflow-y-scroll'>
         <DialogHeader>
-          <DialogTitle>Adauga un nou Event</DialogTitle>
+          <DialogTitle>Editeaza {event?.title}</DialogTitle>
         </DialogHeader>
         <DialogDescription className={"flex flex-col gap-2"}>
-          <ImageDropzone 
-            selectText="Alege imaginea de coperta"
-            onFileSelect={handleImageSelect}
-            hasError={!!form.formState.errors.coverImageUrl}
-          />
-
-          {form.formState.errors.coverImageUrl && (
-            <p className="text-sm font-medium text-destructive">
-              {form.formState.errors.coverImageUrl.message}
-            </p>
-          )}
         </DialogDescription>
 
-        <form id="form-new-event" onSubmit={form.handleSubmit(onSubmit)}>
+        <form id="form-edit-event" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
               name="title"
@@ -158,44 +123,6 @@ const AddEventDialog = () => {
                     id="form-title-translation"
                     aria-invalid={fieldState.invalid}
                   />
-                </Field>
-              )}
-            />
-            <Controller
-              name="type"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <div className="flex-center-between">
-                    <FieldLabel htmlFor="form-type">
-                      Tip Event
-                    </FieldLabel>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </div>
-                  <Select
-                    name={field.name}
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    
-                  >
-                    <SelectTrigger
-                      id="form-type"
-                      aria-invalid={fieldState.invalid}
-                      className="w-full"
-                    >
-                      <SelectValue placeholder="Tip Event" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="event">Eveniment</SelectItem>
-                        <SelectItem value="concert">Concert/Festival</SelectItem>
-                        <SelectItem value="personal_project">Proiect Personal</SelectItem>
-                        <SelectItem value="portraits">Portrete</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
                 </Field>
               )}
             />
@@ -263,16 +190,16 @@ const AddEventDialog = () => {
             Anuleaza
           </DialogClose>
           <Button
-            disabled={isCreatingEvent || !form.formState.isDirty}
+            disabled={isUpdatingEvent || !form.formState.isDirty}
             type='submit'
-            form='form-new-event'
+            form='form-edit-event'
             // onClick={handleCreateEvent}
             className="cursor-pointer text-white rounded-sm px-4 py-1 border"
           >
-            {isCreatingEvent ? (
+            {isUpdatingEvent ? (
               <IconLoader2 className="rotate" />
             ) : (
-              <span>Creeaza</span>
+              <span>Trimite</span>
             )}
           </Button>
         </DialogFooter>
@@ -281,4 +208,4 @@ const AddEventDialog = () => {
   )
 }
 
-export default AddEventDialog
+export default EditEventDialog

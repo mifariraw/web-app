@@ -4,7 +4,7 @@ import { cn } from "@src/lib/utils";
 import Image from "next/image";
 import Cropper, { Area } from "react-easy-crop";
 import { useRef, useState, DragEvent, ChangeEvent } from "react";
-import { IconPhotoPlus, IconLoader2, IconFileTypePdf, IconX } from "@tabler/icons-react";
+import { IconPhotoPlus, IconLoader2, IconX } from "@tabler/icons-react";
 import { toast } from "sonner";
 import { Button } from "@src/components/ui/button";
 import { getCroppedImg } from "@src/lib/utils";

@@ -1,3 +1,4 @@
+import { EventPhoto } from "@src/app/admin/event/[id]/EventGallery";
 import { Document } from "mongoose";
 
 enum EventType {
@@ -21,7 +22,7 @@ export interface IEvent extends Document {
   location: string;
   date: Date;
   coverImageUrl: string;
-  images?: string[];
+  images?: EventPhoto[];
   createdAt: Date;
   updatedAt: Date;
 }

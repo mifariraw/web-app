@@ -53,7 +53,7 @@ export const EventCategorySection = ({ title, type }: EventCategorySectionProps)
         </div>
       </div>
 
-      <div className={cn("flex items-start gap-4 overflow-auto", loading && "!overflow-hidden")}>
+      <div className={cn("flex items-start gap-4 overflow-auto", loading && "overflow-hidden!")}>
         {loading ? (
           Array(4).fill(0).map((_, i) => (
             <EventCardSkeleton key={i} />

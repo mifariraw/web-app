@@ -169,6 +169,16 @@ nextjs-portal {
   text-transform: uppercase;
 }
 
+.swiper-slide {
+  transition: transform 0.3s ease;
+  opacity: 0.6;
+}
+
+.swiper-slide-active {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
 .rotate {
   animation: rotate 0.65s infinite forwards;
   transition: all;

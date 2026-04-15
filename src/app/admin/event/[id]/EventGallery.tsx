@@ -31,9 +31,10 @@ interface GalleryProps {
   id: string;
   photos: EventPhoto[];
   folder: string;
+  isDisabled?: boolean
 }
 
-export default function Gallery({ id, photos, folder }: GalleryProps) {
+export default function Gallery({ id, photos, folder, isDisabled = false }: GalleryProps) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const [index, setIndex] = useState<number | null>(null);
   const [isDeleteing, setIsDeleteing] = useState<boolean>(false)
@@ -138,16 +139,18 @@ export default function Gallery({ id, photos, folder }: GalleryProps) {
   return (
     <>
       <div className="flex-center-between my-2">
-        {selected.size === photos.length ? (
-          <IconSquareCheck 
-            size={20}
-            onClick={() => toggleAll("untoggle")}
-          />
-        ) : (
-          <IconSquare 
-            size={20}
-            onClick={() => toggleAll("toggle")}
-          />
+        {isDisabled && (
+          selected.size === photos.length ? (
+            <IconSquareCheck 
+              size={20}
+              onClick={() => toggleAll("untoggle")}
+            />
+          ) : (
+            <IconSquare 
+              size={20}
+              onClick={() => toggleAll("toggle")}
+            />
+          )
         )}
 
         <Lightbox
@@ -162,11 +165,14 @@ export default function Gallery({ id, photos, folder }: GalleryProps) {
         />
 
         <div className="flex-center gap-4">
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <Dialog 
+            open={dialogOpen} 
+            onOpenChange={setDialogOpen}
+          >
             <DialogTrigger 
               asChild 
               disabled={selected.size === 0}
-              className={cn(selected.size === 0 && "pointer-events-none opacity-40")}
+              className={cn(selected.size === 0 && "pointer-events-none opacity-40", isDisabled && "hidden")}
             >
               <IconTrash size={20} className="text-destructive" />
             </DialogTrigger>
@@ -196,11 +202,13 @@ export default function Gallery({ id, photos, folder }: GalleryProps) {
             </DialogContent>
           </Dialog>
 
-          <IconDownload 
-            size={20} 
-            className={cn(selected.size === 0 && "pointer-events-none opacity-40")}
-            onClick={manageDownload}
-          />
+          {!isDisabled && (
+            <IconDownload 
+              size={20} 
+              className={cn(selected.size === 0 && "pointer-events-none opacity-40")}
+              onClick={manageDownload}
+            />
+          )}
         </div>
       </div>
       <div
@@ -234,14 +242,15 @@ export default function Gallery({ id, photos, folder }: GalleryProps) {
                 onClick={() => setIndex(i)}
               />
 
-              {/* Overlay */}
-              <div className="absolute top-1 let-1 ml-2 opacity-100 group-hover:opacity-100">
-                {isSelected ? (
-                  <IconSquareCheck className="bg-black text-white" />
-                ) : (
-                  <IconSquare className="text-white bg-black" />
-                )}
-              </div>
+              {!isSelected && (
+                <div className="absolute top-1 let-1 ml-2 opacity-100 group-hover:opacity-100">
+                  {isSelected ? (
+                    <IconSquareCheck className="bg-black text-white" />
+                  ) : (
+                    <IconSquare className="text-white bg-black" />
+                  )}
+                </div>
+              )}
             </div>
           );
         })}

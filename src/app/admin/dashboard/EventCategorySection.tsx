@@ -53,7 +53,7 @@ export const EventCategorySection = ({ title, type }: EventCategorySectionProps)
         </div>
       </div>
 
-      <div className={cn("flex items-start gap-4 overflow-auto", loading && "overflow-hidden!")}>
+      <div className={cn("flex items-start justify-start gap-4 overflow-x-scroll", loading && "overflow-hidden!")}>
         {loading ? (
           Array(4).fill(0).map((_, i) => (
             <EventCardSkeleton key={i} />
@@ -63,7 +63,7 @@ export const EventCategorySection = ({ title, type }: EventCategorySectionProps)
             <EventCard key={i} event={event} />
           ))
         ) : showNoResults ? (
-          <div className="flex flex-col w-full items-center justify-center py-10 gap-4">
+          <div className="flex-col w-full items-center justify-center py-10 gap-4">
             <IconXMark size={86} className="opacity-40" />
             <span className="text-base text-muted-foreground">Nu exista rezultate</span>
           </div>

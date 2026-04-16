@@ -65,8 +65,9 @@ export async function logoutAdmin() {
 
 // event management
 export async function createNewEvent(data: z.infer<typeof addEventFormSchema>) {
-  const { url } = await uploadImage(data.coverImageUrl, data.type)
-  
+  const url = await uploadImage(data.coverImageUrl, data.type)
+  console.log(url)
+
   const res = await fetch("/api/admin/create-event", {
     method: "POST",
     headers: {

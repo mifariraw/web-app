@@ -10,7 +10,7 @@ interface EventCardProps {
 const EventCard = ({ event }: EventCardProps) => {
   return (
     <Link 
-      className='flex flex-col items-center gap-2'
+      className='flex flex-col w-1/3 shrink-0 items-center gap-2'
       href={"/admin/event/" + event?._id.toString()}
     >
       <Image

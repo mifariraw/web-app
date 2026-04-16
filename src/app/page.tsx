@@ -42,7 +42,7 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number>(0)
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center font-sans dark:bg-black">
+    <div className="flex flex-col flex-1 items-center justify-center font-sans dark:bg-black pt-32">
       <main className="flex flex-1 w-full flex-col items-center justify-between px-4 dark:bg-black sm:items-start">
         <Swiper
           grabCursor

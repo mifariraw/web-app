@@ -129,9 +129,9 @@ export default function Gallery({ id, photos, folder, isDisabled = false }: Gall
 
   if (!photos.length) {
     return (
-      <div className="flex flex-col gap-2 items-center justify-center pt-4">
+      <div className="flex flex-col gap-2 items-center justify-center py-8">
         <IconPhotoCancel size={86} className="opacity-40" />
-        <span>Nu exista poze pentru acest eveniment</span>
+        <span className="z-10">Nu exista poze pentru acest eveniment</span>
       </div>
     )
   }
@@ -139,7 +139,7 @@ export default function Gallery({ id, photos, folder, isDisabled = false }: Gall
   return (
     <>
       <div className="flex-center-between my-2">
-        {isDisabled && (
+        {!isDisabled && (
           selected.size === photos.length ? (
             <IconSquareCheck 
               size={20}
@@ -239,10 +239,13 @@ export default function Gallery({ id, photos, folder, isDisabled = false }: Gall
                 className={`object-cover rounded-md transition-transform duration-200 ease-in-out ${
                   isSelected ? "opacity-70 scale-95" : ""
                 }`}
-                onClick={() => setIndex(i)}
+                onClick={(e) => {
+                  e.preventDefault()
+                  setIndex(i)
+                }}
               />
 
-              {!isSelected && (
+              {!isDisabled && (
                 <div className="absolute top-1 let-1 ml-2 opacity-100 group-hover:opacity-100">
                   {isSelected ? (
                     <IconSquareCheck className="bg-black text-white" />

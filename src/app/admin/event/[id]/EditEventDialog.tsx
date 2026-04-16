@@ -176,7 +176,6 @@ const EditEventDialog = ({ event }: { event: IEvent }) => {
                         selected={field.value}
                         onSelect={field.onChange} // Updates the form state
                         disabled={(date) => date < new Date("1900-01-01")}
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>

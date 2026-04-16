@@ -5,7 +5,7 @@ import React from 'react'
 const EventCard = ({ event }: { event: IEvent }) => {
   return (
     <div className='flex flex-col items-center gap-4'>
-      <h1 className='nohemi text-white text-3xl'>{event.title}</h1>
+      <h1 className='nohemi text-white text-4xl'>{event.title}</h1>
 
       <Image 
         src={event.coverImageUrl}

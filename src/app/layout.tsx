@@ -46,7 +46,7 @@ export default function RootLayout({
         </video>
         <div className="absolute inset-0 bg-black/50" />
 
-        <div className="flex flex-col min-h-full w-dvw overflow-x-hidden">
+        <div className="flex flex-col min-h-screen w-dvw overflow-x-hidden">
           {children}
 
           <Toaster

@@ -4,6 +4,7 @@ import React from 'react'
 import logo from "@public/images/White.svg";
 import StaggeredMenu from './StaggeredMenu';
 import { usePathname } from "next/navigation";
+import { useDisableScroll } from '@src/hooks/useDisableScroll';
 
 const menuItems = [
   { label: 'Home', link: '/' },
@@ -23,6 +24,7 @@ const socialItems = [
 
 
 const MobileNavbar = () => {
+  useDisableScroll(true)
   const pathname = usePathname();
 
   if (pathname.startsWith("/admin")) {

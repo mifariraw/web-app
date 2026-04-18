@@ -29,7 +29,6 @@ export async function loginAdmin(email: string, password: string) {
   toast.success("Logged In");
 }
 
-
 export async function changePassword(oldPassword: string, newPassword: string) {
   const res = await fetch("/api/admin/change-password", {
     method: "POST",
@@ -66,7 +65,6 @@ export async function logoutAdmin() {
 // event management
 export async function createNewEvent(data: z.infer<typeof addEventFormSchema>) {
   const url = await uploadImage(data.coverImageUrl, data.type)
-  console.log(url)
 
   const res = await fetch("/api/admin/create-event", {
     method: "POST",

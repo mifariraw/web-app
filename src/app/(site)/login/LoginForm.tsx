@@ -137,7 +137,7 @@ export function LoginForm() {
           </Button>
           <Button 
             type="submit" 
-            disabled={isLoggingIn}
+            disabled={isLoggingIn || !form.formState.isDirty}
             form="form-login"
             className="flex-3/4 bg-[#5227FF] text-white hover:bg-main-accent/90"
           >

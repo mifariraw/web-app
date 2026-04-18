@@ -8,12 +8,12 @@ import { useDisableScroll } from '@src/hooks/useDisableScroll';
 
 const menuItems = [
   { label: 'Home', link: '/' },
-  { label: 'Contact', link: '/' },
-  { label: 'Despre', link: '/about' },
-  { label: 'Concerte', link: '/' },
-  { label: 'Evenimente', link: '/' },
-  { label: 'Proiecte Personale', link: '/services' },
-  { label: 'Portrete', link: '/contact' }
+  { label: 'Contact', link: '/contact' },
+  { label: 'Despre', link: '/despre' },
+  { label: 'Concerte', link: '/events/concert' },
+  { label: 'Evenimente', link: '/events/event' },
+  { label: 'Proiecte Personale', link: '/events/personal_projects' },
+  { label: 'Portrete', link: '/events/potrait' }
 ];
 
 const socialItems = [

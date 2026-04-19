@@ -26,4 +26,5 @@ export interface IEvent extends Document {
   images?: EventPhoto[];
   createdAt: Date;
   updatedAt: Date;
+  likes: number;
 }

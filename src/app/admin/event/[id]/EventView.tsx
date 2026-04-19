@@ -3,7 +3,7 @@
 import EventSkeleton from '@src/components/skeletons/EventSkeleton'
 import { Separator } from '@src/components/ui/separator'
 import { useEvents } from '@src/hooks/useEvents'
-import { IconCalendarEvent, IconLanguage, IconLibraryPhoto, IconMapPin, IconReload } from '@tabler/icons-react'
+import { IconCalendarEvent, IconLanguage, IconLibraryPhoto, IconMapPin, IconReload, IconThumbUp } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { ro } from 'date-fns/locale'
 import Image from 'next/image'
@@ -103,10 +103,16 @@ const EventView = ({ id }: { id: string }) => {
             )}
           </h2>
 
-          <ImageUploader 
-            id={currentEvent._id.toString()} 
-            folder={currentEvent.type} 
-          />
+          <div className='flex-center gap-2'>
+            <ImageUploader 
+              id={currentEvent._id.toString()} 
+              folder={currentEvent.type} 
+            />
+            <div className='flex-center gap-1'>
+              <IconThumbUp />
+              <span>{currentEvent.likes}</span>
+            </div>
+          </div>
         </div>
 
         <Gallery 

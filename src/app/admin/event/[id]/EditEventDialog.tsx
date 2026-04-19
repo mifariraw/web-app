@@ -39,6 +39,7 @@ export const formSchema = z.object({
   title: z.string().min(1, "Titlul este obligatoriu"),
   titleTranslation: z.string().min(1, "Traducerea este obligatorie"),
   location: z.string().min(1, "Locația este obligatorie"),
+  locationTranslation: z.string().min(1, "Traducerea este obligatorie"),
   date: z.date(),
     // .refine((date) => date > new Date(), "Data trebuie să fie în viitor"),
 })
@@ -53,6 +54,7 @@ const EditEventDialog = ({ event }: { event: IEvent }) => {
       title: event?.title || "",
       titleTranslation: event?.titleTranslation || "",
       location: event?.location || "",
+      locationTranslation: event?.locationTranslation || "",
       date: event?.date || new Date(),
     },
   })
@@ -142,6 +144,27 @@ const EditEventDialog = ({ event }: { event: IEvent }) => {
                   <Input
                     {...field}
                     id="form-location"
+                    aria-invalid={fieldState.invalid}
+                  />
+                </Field>
+              )}
+            />
+            <Controller
+              name="locationTranslation"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <div className="flex-center-between">
+                    <FieldLabel htmlFor="form-location-translation">
+                      Traducere Locație
+                    </FieldLabel>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </div>
+                  <Input
+                    {...field}
+                    id="form-location-translation"
                     aria-invalid={fieldState.invalid}
                   />
                 </Field>

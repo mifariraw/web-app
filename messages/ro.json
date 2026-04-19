@@ -46,6 +46,7 @@
     "personal_projects": "Proiect Personal",
     "potraits": "Portret",
     "gallery": "Galerie",
-    "noPhotos": "Nu exista poze pentru acest eveniment"
+    "noPhotos": "Nu exista poze pentru acest eveniment",
+    "noEvents": "Nu exista evenimente pentru aceasta categorie"
   }
 }

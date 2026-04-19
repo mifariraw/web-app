@@ -7,22 +7,70 @@ import "swiper/css/effect-coverflow";
 
 import { Controller, EffectCoverflow } from "swiper/modules";
 import EventCard from './EventCard';
-import { IconCalendarWeekFilled, IconChevronLeft, IconChevronRight, IconLibraryPhoto, IconMapPinFilled, IconPointFilled, IconThumbUp, IconThumbUpFilled } from '@tabler/icons-react';
+import { IconAppsOff, IconCalendarWeekFilled, IconChevronLeft, IconChevronRight, IconLibraryPhoto, IconMapPinFilled, IconPointFilled, IconThumbUp, IconThumbUpFilled } from '@tabler/icons-react';
 import { cn } from '@src/lib/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Swiper as SwiperType } from 'swiper/types';
 import Gallery from '@src/app/admin/event/[id]/EventGallery';
 import { format } from 'date-fns';
 import EventUserSkeleton from '@src/components/skeletons/EventUserSkeleton';
 import { useLocale, useTranslations } from "next-intl";
+import { Button } from '@src/components/ui/button';
+import Link from 'next/link';
+import { likeEvent, unlikeEvent } from '@src/lib/user';
 
 const EventView = ({ type }: { type: string }) => {
   const { events, loading } = useEvents(type, "/api/events")
   const t = useTranslations('EventsPage')
   const locale = useLocale()
+  const [likedEvents, setLikedEvents] = useState<string[]>(() => {
+    const stored = localStorage.getItem("liked_events");
+    if (!stored) return [];
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return [];
+    }
+  })
   const [eventsSwiper, setEventsSwiper] = useState<SwiperType | null>(null)
   const [dotsSwiper, setDotsSwiper] = useState<SwiperType | null>(null)
   const [activeIndex, setActiveIndex] = useState<number>(0)
+
+  const addItem = (id: string) => {
+    setLikedEvents(prev => [...prev, id]);
+
+    likeEvent(id)
+  };
+
+  const removeItem = (id: string) => {
+    setLikedEvents(prev => prev.filter(e => e !== id));
+
+    unlikeEvent(id)
+  };
+
+  useEffect(() => {
+    localStorage.setItem("liked_events", JSON.stringify(likedEvents));
+  }, [likedEvents]);
+
+  if (!loading && !events.length) {
+    return (
+      <div className='pt-24 z-10 text-white'>
+        <div className="flex flex-col gap-2 items-center justify-center py-8">
+          <IconAppsOff size={128} className="opacity-70 text-white" />
+          <span className="z-10 text-2xl mt-24 text-center">
+            {t('noEvents')}
+          </span>
+
+          <Button
+            variant={"outline"}
+            className='bg-transparent hover:bg-transparent px-8 py-6 border-white mt-24'
+          >
+            <Link href={"/"} className='text-white text-xl'>Home</Link>
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   if (loading || !events.length) {
     return (
@@ -137,9 +185,22 @@ const EventView = ({ type }: { type: string }) => {
               {t('gallery')}
             </span>
           </h2>
-
-          <IconThumbUp size={28} />
-          <IconThumbUpFilled size={28} className='hidden' />
+          
+          {!likedEvents.includes(events[activeIndex]._id.toString())
+            ? (
+              <IconThumbUp 
+                size={28} 
+                onClick={() => addItem(events[activeIndex]._id.toString())}
+                className='opacity-80'
+              />
+            ) : (
+              <IconThumbUpFilled 
+                size={28} 
+                onClick={() => removeItem(events[activeIndex]._id.toString())}
+                className='opacity-80'
+              />
+            )
+          }
         </div>
         <Gallery 
           id={events[activeIndex]._id.toString()}

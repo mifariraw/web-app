@@ -5,7 +5,6 @@ import {routing} from "@src/i18n/routing";
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
-// i18n middleware
 const intlMiddleware = createMiddleware(routing);
 
 export default async function middleware(req) {
@@ -15,6 +14,7 @@ export default async function middleware(req) {
   const isAdminRoute = pathname.startsWith("/admin");
   const isLoginRoute = pathname.startsWith("/login");
 
+  // 🔐 AUTH
   if (isAdminRoute) {
     if (!token) {
       return NextResponse.redirect(
@@ -36,8 +36,12 @@ export default async function middleware(req) {
         new URL("/admin/dashboard", req.url)
       );
     } catch {
-      // invalid token -> allow login
+      // allow login
     }
+  }
+
+  if (isAdminRoute || isLoginRoute) {
+    return NextResponse.next();
   }
 
   return intlMiddleware(req);
@@ -45,6 +49,6 @@ export default async function middleware(req) {
 
 export const config = {
   matcher: [
-    '/((?!api|trpc|_next|_vercel|admin|.*\\..*).*)',
+    '/((?!api|trpc|_next|_vercel|.*\\..*).*)'
   ]
 };

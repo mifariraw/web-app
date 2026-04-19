@@ -67,6 +67,7 @@ const AddEventDialog = () => {
       titleTranslation: "",
       type: "event",
       location: "",
+      locationTranslation: "",
       date: new Date(),
       coverImageUrl: undefined as unknown as File,
     },

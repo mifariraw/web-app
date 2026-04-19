@@ -14,6 +14,7 @@ const EventSkeleton = () => {
           <Skeleton className='w-1/2 h-6' />
           <Skeleton className='w-1/2 h-6' />
           <Skeleton className='w-1/2 h-6' />
+          <Skeleton className='w-1/2 h-6' />
         </div>
         
         <div className='flex-center gap-2 w-full'>

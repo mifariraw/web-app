@@ -48,6 +48,10 @@ const EventSchema = new Schema<IEvent>(
       type: String,
       required: true
     },
+    likes: {
+      type: Number,
+      default: 0
+    },
     images: {
       type: [EventImageSchema],
       default: []

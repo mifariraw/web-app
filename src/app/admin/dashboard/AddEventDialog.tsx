@@ -50,6 +50,7 @@ export const formSchema = z.object({
     ["concert", "event", "personal_project", "portraits"]
   ),
   location: z.string().min(1, "Locația este obligatorie"),
+  locationTranslation: z.string().min(1, "Traducerea este obligatorie"),
   date: z.date(),
     // .refine((date) => date > new Date(), "Data trebuie să fie în viitor"),
   coverImageUrl: z.instanceof(File),
@@ -215,6 +216,27 @@ const AddEventDialog = () => {
                   <Input
                     {...field}
                     id="form-location"
+                    aria-invalid={fieldState.invalid}
+                  />
+                </Field>
+              )}
+            />
+            <Controller
+              name="locationTranslation"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <div className="flex-center-between">
+                    <FieldLabel htmlFor="form-location-translation">
+                      Traducere Locație
+                    </FieldLabel>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </div>
+                  <Input
+                    {...field}
+                    id="form-location-translation"
                     aria-invalid={fieldState.invalid}
                   />
                 </Field>

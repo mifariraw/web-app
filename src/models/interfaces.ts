@@ -20,6 +20,7 @@ export interface IEvent extends Document {
   titleTranslation: string;
   type: EventType;
   location: string;
+  locationTranslation: string;
   date: Date;
   coverImageUrl: string;
   images?: EventPhoto[];

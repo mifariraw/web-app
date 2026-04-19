@@ -31,10 +31,17 @@ interface GalleryProps {
   id: string;
   photos: EventPhoto[];
   folder: string;
+  noPhotosText: string;
   isDisabled?: boolean
 }
 
-export default function Gallery({ id, photos, folder, isDisabled = false }: GalleryProps) {
+export default function Gallery({ 
+  id, 
+  photos, 
+  folder, 
+  isDisabled = false, 
+  noPhotosText 
+}: GalleryProps) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const [index, setIndex] = useState<number | null>(null);
   const [isDeleteing, setIsDeleteing] = useState<boolean>(false)
@@ -131,7 +138,7 @@ export default function Gallery({ id, photos, folder, isDisabled = false }: Gall
     return (
       <div className="flex flex-col gap-2 items-center justify-center py-8">
         <IconPhotoCancel size={86} className="opacity-40" />
-        <span className="z-10">Nu exista poze pentru acest eveniment</span>
+        <span className="z-10">{noPhotosText}</span>
       </div>
     )
   }

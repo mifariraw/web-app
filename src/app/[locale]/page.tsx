@@ -13,39 +13,38 @@ import { useTranslations } from 'next-intl';
 
 const cardsContent = [
   {
-    title: "Evenimente",
+    title: "eventsCard",
     subtitle: "",
     bgImage: aboutImage,
     url: "event"
   },
   {
-    title: "Concerte/Festivaluri",
+    title: "concertsCard",
     subtitle: "",
     bgImage: aboutImage,
     url: "concert"
   },
   {
-    title: "Proiecte Personale",
+    title: "projectsCard",
     subtitle: "",
     bgImage: aboutImage,
     url: "personal_project"
   },
   {
-    title: "Portrete",
-    subtitle: "Fotograf",
+    title: "portraitsCard",
+    subtitle: "",
     bgImage: aboutImage,
     url: "portraits"
   },
 ]
 
 export default function Home() {
-  const t = useTranslations('HomePage');
+  const t = useTranslations('Home');
   const router = useRouter()
   const [activeIndex, setActiveIndex] = useState<number>(0)
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center font-sans dark:bg-black pt-24">
-      <h1>{t('title')}</h1>
       <main className="flex flex-1 w-full flex-col items-center justify-start px-4 mt-8 dark:bg-black sm:items-start">
         <Swiper
           grabCursor
@@ -60,7 +59,7 @@ export default function Home() {
               className="w-full flex items-center justify-center px-3"
             >
               <HomeCard 
-                title={card.title}
+                title={t(card.title)}
                 subtitle={card.subtitle}
                 bgImage={card.bgImage}
                 handleClick={() => router.replace("/events/" + card.url)}

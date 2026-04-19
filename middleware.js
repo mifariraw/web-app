@@ -1,33 +1,50 @@
-import { NextResponse } from "next/server";
-import { jwtVerify } from "jose";
+import {NextResponse} from "next/server";
+import {jwtVerify} from "jose";
+import createMiddleware from "next-intl/middleware";
+import {routing} from "@src/i18n/routing";
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
-export default async function proxy(req) {
+// i18n middleware
+const intlMiddleware = createMiddleware(routing);
+
+export default async function middleware(req) {
+  const {pathname} = req.nextUrl;
   const token = req.cookies.get("admin_token")?.value;
-  const { pathname } = req.nextUrl;
-  
-  if (pathname.startsWith("/admin") && !token) {
-    return NextResponse.redirect(new URL("/login?expired=true", req.url));
-  }
 
-  if (token) {
+  const isAdminRoute = pathname.startsWith("/admin");
+  const isLoginRoute = pathname.startsWith("/login");
+
+  if (isAdminRoute) {
+    if (!token) {
+      return NextResponse.redirect(
+        new URL("/login?expired=true", req.url)
+      );
+    }
+
     try {
-      const { payload } = await jwtVerify(token, secret);
-
-      if (pathname === "/login") {
-        return NextResponse.redirect(new URL("/admin/dashboard", req.url));
-      }
-
-      return NextResponse.next();
-    } catch (error) {
-      console.error("JWT Verification failed:", error);
-      
-      if (pathname !== "/login") {
-        return NextResponse.redirect(new URL("/login", req.url));
-      }
+      await jwtVerify(token, secret);
+    } catch {
+      return NextResponse.redirect(new URL("/login", req.url));
     }
   }
 
-  return NextResponse.next();
+  if (isLoginRoute && token) {
+    try {
+      await jwtVerify(token, secret);
+      return NextResponse.redirect(
+        new URL("/admin/dashboard", req.url)
+      );
+    } catch {
+      // invalid token -> allow login
+    }
+  }
+
+  return intlMiddleware(req);
 }
+
+export const config = {
+  matcher: [
+    '/((?!api|trpc|_next|_vercel|admin|.*\\..*).*)',
+  ]
+};

@@ -5,16 +5,7 @@ import logo from "@public/images/White.svg";
 import StaggeredMenu from './StaggeredMenu';
 import { usePathname } from "next/navigation";
 import { useDisableScroll } from '@src/hooks/useDisableScroll';
-
-const menuItems = [
-  { label: 'Home', link: '/' },
-  { label: 'Contact', link: '/contact' },
-  { label: 'Despre', link: '/despre' },
-  { label: 'Concerte', link: '/events/concert' },
-  { label: 'Evenimente', link: '/events/event' },
-  { label: 'Proiecte Personale', link: '/events/personal_projects' },
-  { label: 'Portrete', link: '/events/potrait' }
-];
+import { useTranslations } from 'next-intl';
 
 const socialItems = [
   { label: 'TikTok', link: 'https://www.tiktok.com/@mifari.raw' },
@@ -25,7 +16,18 @@ const socialItems = [
 
 const MobileNavbar = () => {
   useDisableScroll(true)
+  const t = useTranslations('MobileNavbar');
   const pathname = usePathname();
+
+  const menuItems = [
+    { label: 'Home', link: '/' },
+    { label: 'Contact', link: '/contact' },
+    { label: t('about'), link: '/about' },
+    { label: t('concerts'), link: '/events/concert' },
+    { label: t('events'), link: '/events/event' },
+    { label: t('potraits'), link: '/events/potrait' },
+    { label: t('personalProjects'), link: '/events/personal_projects' },
+  ];
 
   if (pathname.startsWith("/admin")) {
     return null;

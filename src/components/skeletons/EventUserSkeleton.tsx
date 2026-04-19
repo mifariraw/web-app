@@ -2,7 +2,7 @@ import React from 'react'
 import { Skeleton } from '../ui/skeleton';
 import { IconLibraryPhoto, IconLoader2 } from '@tabler/icons-react';
 
-const EventUserSkeleton = () => {
+const EventUserSkeleton = ({ galleryText }: { galleryText: string }) => {
   return (
     <div className='p-4 h-full relative'>
       <section className='w-full flex flex-col items-center justify-center gap-4'>
@@ -22,7 +22,7 @@ const EventUserSkeleton = () => {
         <div className="flex-center-between mt-16 mb-8 z-10 text-white">
           <h2 className="flex-center gap-2 whitespace-nowrap">
             <IconLibraryPhoto size={24} />
-            <span className='text-2xl uppercase font-bold'>Galerie</span>
+            <span className='text-2xl uppercase font-bold'>{galleryText}</span>
             <IconLoader2 size={20} className='rotate' />
           </h2>
         </div>

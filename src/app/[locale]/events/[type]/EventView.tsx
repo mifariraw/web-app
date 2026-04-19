@@ -7,16 +7,19 @@ import "swiper/css/effect-coverflow";
 
 import { Controller, EffectCoverflow } from "swiper/modules";
 import EventCard from './EventCard';
-import { IconCalendarWeekFilled, IconChevronLeft, IconChevronRight, IconLibraryPhoto, IconMapPinFilled, IconPointFilled } from '@tabler/icons-react';
+import { IconCalendarWeekFilled, IconChevronLeft, IconChevronRight, IconLibraryPhoto, IconMapPinFilled, IconPointFilled, IconThumbUp, IconThumbUpFilled } from '@tabler/icons-react';
 import { cn } from '@src/lib/utils';
 import { useState } from 'react';
 import { Swiper as SwiperType } from 'swiper/types';
 import Gallery from '@src/app/admin/event/[id]/EventGallery';
 import { format } from 'date-fns';
 import EventUserSkeleton from '@src/components/skeletons/EventUserSkeleton';
+import { useLocale, useTranslations } from "next-intl";
 
 const EventView = ({ type }: { type: string }) => {
   const { events, loading } = useEvents(type, "/api/events")
+  const t = useTranslations('EventsPage')
+  const locale = useLocale()
   const [eventsSwiper, setEventsSwiper] = useState<SwiperType | null>(null)
   const [dotsSwiper, setDotsSwiper] = useState<SwiperType | null>(null)
   const [activeIndex, setActiveIndex] = useState<number>(0)
@@ -24,14 +27,16 @@ const EventView = ({ type }: { type: string }) => {
   if (loading || !events.length) {
     return (
       <div className='pt-24'>
-        <EventUserSkeleton />
+        <EventUserSkeleton galleryText={t('gallery')} />
       </div>
     )
   }
 
   return (
     <div className='px-7 pt-24'>
-      <h1 className='z-10 relative text-white text-center text-lg'>{"Eveniment"}</h1>
+      <h3 className='z-10 relative text-white text-center text-lg'>
+        {t(`${type}`)}
+      </h3>
       <Swiper
         onSwiper={setEventsSwiper}
         effect="coverflow"
@@ -105,12 +110,22 @@ const EventView = ({ type }: { type: string }) => {
       <div className='flex flex-col items-center justify-center z-10 text-lg text-white mt-4'>
         <div className='flex-center gap-2 z-10'>
           <IconMapPinFilled size={24} className='opacity-60' />
-          <span>{events[activeIndex].location}</span>
+          <span>
+            {locale === "ro" 
+              ? events[activeIndex].location
+              : events[activeIndex].locationTranslation
+            }
+          </span>
         </div>
 
         <div className='flex-center gap-2 z-10'>
           <IconCalendarWeekFilled size={24} className='opacity-60' />
-          <span>{format(events[activeIndex].date, 'dd-MM-yyyy')}</span>
+          <span>
+            {format(
+              events[activeIndex].date, 
+              locale === "ro" ? 'dd-MM-yyyy' : "MM-dd-yyyy"
+            )}
+          </span>
         </div>
       </div>
       
@@ -118,13 +133,19 @@ const EventView = ({ type }: { type: string }) => {
         <div className="flex-center-between z-10">
           <h2 className="flex-center gap-2 whitespace-nowrap">
             <IconLibraryPhoto size={28} />
-            <span className='text-2xl uppercase font-bold'>Galerie</span>
+            <span className='text-2xl uppercase font-bold'>
+              {t('gallery')}
+            </span>
           </h2>
+
+          <IconThumbUp size={28} />
+          <IconThumbUpFilled size={28} className='hidden' />
         </div>
         <Gallery 
           id={events[activeIndex]._id.toString()}
           folder={events[activeIndex].type}
           photos={events[activeIndex].images ?? []} 
+          noPhotosText={t('noPhotos')}
           isDisabled
         />
       </div>

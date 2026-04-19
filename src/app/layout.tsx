@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import MobileNavbar from "@src/components/MobileNavbar";
 import { Toaster } from "sonner";
 import { IconAlertTriangle, IconCircleCheck, IconCircleX, IconInfoCircle } from "@tabler/icons-react";
 
@@ -31,7 +30,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased overflow-x-hidden`}
     >
       <body className="flex flex-col bg-black relative overflow-hidden overflow-x-hidden">
-        <MobileNavbar />
+        {/* <MobileNavbar /> */}
         <video
           autoPlay
           loop
@@ -46,7 +45,7 @@ export default function RootLayout({
         </video>
         <div className="absolute inset-0 bg-black/50" />
 
-        <div className="flex flex-col min-h-screen w-dvw overflow-x-hidden">
+        <div className="flex flex-col min-h-screen w-dvw overflow-x-hidden relative">
           {children}
 
           <Toaster

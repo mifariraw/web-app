@@ -25,14 +25,16 @@ import { useEffect, useState } from "react"
 import { IconLoader2 } from "@tabler/icons-react"
 import { loginAdmin } from "@src/lib/admin"
 import { useRouter, useSearchParams } from "next/navigation"
- 
-export const formSchema = z.object({
-  email: z.email("Enter a valid email address"),
-  password: z
-    .string()
-    .min(6, "At least 6 characters")
-    .max(100, "At most 100 characters"),
-})
+import { useTranslations } from "next-intl"
+
+export const createFormSchema = (t: (key: string) => string) =>
+  z.object({
+    email: z.email(t("email.invalid")),
+    password: z
+      .string()
+      .min(6, t("password.min"))
+      .max(100, t("password.max"))
+  });
 
 export function LoginForm() {
   const searchParams = useSearchParams()
@@ -40,6 +42,8 @@ export function LoginForm() {
 
   const router = useRouter()
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false)
+  const t = useTranslations('Login');
+  const formSchema = createFormSchema(t);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -133,7 +137,7 @@ export function LoginForm() {
             onClick={() => form.reset()}
             className="flex-1/4"
           >
-            Reseteaza
+            {t('reset')}
           </Button>
           <Button 
             type="submit" 

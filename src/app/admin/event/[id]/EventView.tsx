@@ -113,6 +113,7 @@ const EventView = ({ id }: { id: string }) => {
           id={currentEvent._id.toString()} 
           photos={currentEvent.images || []} 
           folder={currentEvent.type} 
+          noPhotosText='Nu exista poze pentru acest eveniment'
         />
       </section>
     </div>

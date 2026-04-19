@@ -18,18 +18,22 @@ import { Separator } from '@src/components/ui/separator'
 import { useForm as useFormSpree } from '@formspree/react';
 import Link from 'next/link'
 import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
 
-export const formSchema = z.object({
-  email: z.email("Enter a valid email address"),
-  text: z
-    .string()
-    .min(6, "At least 6 characters")
-    .max(100, "At most 100 characters"),
-})
+export const createFormSchema = (t: (key: string) => string) =>
+  z.object({
+    email: z.email(t("email.invalid")),
+    text: z
+      .string()
+      .min(6, t("text.min"))
+      .max(500, t("text.max"))
+  });
 
 const ContactPage = () => {
   const [state, handleSubmit] = useFormSpree("xlgannvw");
   const [isSending, setIsSending] = useState<boolean>(false)
+  const t = useTranslations('ContactForm');
+  const formSchema = createFormSchema(t);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -87,7 +91,7 @@ const ContactPage = () => {
               <Field data-invalid={fieldState.invalid}>
                 <div className="flex-center-between">
                   <FieldLabel htmlFor="form-text" className="text-white! text-xl">
-                    Mesaj
+                    {t('message')}
                   </FieldLabel>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -98,7 +102,7 @@ const ContactPage = () => {
                   id="form-text"
                   aria-invalid={fieldState.invalid}
                   autoComplete="off"
-                  className='rounded-none! border-0 border-b border-b-white text-white text-xl h-30 max-h-30 overflow-y-scroll'
+                  className='rounded-none! border-0 border-b border-b-white text-white text-xl h-30 max-h-30 resize-none overflow-y-scroll'
                 />
               </Field>
             )}
@@ -114,7 +118,7 @@ const ContactPage = () => {
             {isSending ? (
               <IconLoader2 className="rotate" size={20} />
             ) : (
-              "Trimite"
+              t('sendMessage')
             )}
           </Button>
         </Field>

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -10,7 +11,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
-        // pathname: `/${process.env.CLOUDINARY_CLOUD_NAME}/**`,
+        pathname: `/${process.env.CLOUDINARY_CLOUD_NAME}/**`,
       },
     ],
   },
@@ -23,4 +24,5 @@ const nextConfig: NextConfig = {
   ],
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin();
+export default withNextIntl(nextConfig);

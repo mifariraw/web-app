@@ -36,6 +36,10 @@ const EventSchema = new Schema<IEvent>(
       required: true,
       index: true,
     },
+    locationTranslation: {
+      type: String,
+      required: true
+    },
     date: {
       type: Date,
       required: true

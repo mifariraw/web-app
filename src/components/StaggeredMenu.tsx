@@ -5,6 +5,21 @@ import { gsap } from 'gsap';
 import { StaggeredMenuProps } from "@lib/interfaces";
 import Image from 'next/image';
 import Link from 'next/link';
+import { IconDashboard, IconLoader2, IconLogout } from '@tabler/icons-react';
+import { cn } from '@src/lib/utils';
+import { useLocale } from 'next-intl';
+import { useRouter, usePathname } from "@src/i18n/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@components/ui/select"
+import usFlag from "@public/images/us-flag.webp"
+import roFlag from "@public/images/ro-flag.webp"
+import { useParams } from 'next/navigation';
 
 export const StaggeredMenu = ({
   position = 'right',
@@ -25,7 +40,14 @@ export const StaggeredMenu = ({
   onMenuClose
 }: StaggeredMenuProps) => {
   const [open, setOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false);
+  const locale = useLocale()
   const openRef = useRef<boolean>(false);
+  const curentPathname = usePathname()
+  const params = useParams()
+  const router = useRouter()
+
 
   const panelRef = useRef<HTMLDivElement | null>(null);
   const preLayersRef = useRef<HTMLDivElement | null>(null);
@@ -81,6 +103,34 @@ export const StaggeredMenu = ({
     });
     return () => ctx.revert();
   }, [menuButtonColor, position]);
+
+  useEffect(() => {
+    fetch("/api/me")
+      .then(res => res.json())
+      .then(data => setIsAdmin(data.authenticated));
+  }, []);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+
+    await fetch("/api/logout", {
+      method: "POST",
+    })
+      .finally(() => {
+        setIsAdmin(false)
+        setOpen(false)
+      })
+  }
+
+  const changeLocale = (newLocale: string) => {
+    const type = params.type as string
+
+    router.replace(
+      {
+        pathname: curentPathname,
+        params: { type: type }
+      }, {locale: newLocale});
+  }
 
   const buildOpenTimeline = useCallback((): gsap.core.Timeline | null => {
     const panel = panelRef.current;
@@ -385,7 +435,7 @@ export const StaggeredMenu = ({
         </div>
 
         <header
-          className="staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-between p-[2em] pointer-events-none z-20 backdrop-blur-xs" // bg-black/30 backdrop-blur-md
+          className={cn("staggered-menu-header absolute top-0 left-0 w-full flex items-center justify-between p-[2em] pointer-events-none z-20 transition-all bg-white", !open && "backdrop-blur-xs")} // bg-black/30 backdrop-blur-md
           aria-label="Main navigation header"
         >
           <div className="sm-logo flex items-center select-none pointer-events-auto" aria-label="Logo">
@@ -485,7 +535,61 @@ export const StaggeredMenu = ({
 
             {displaySocials && socialItems && socialItems.length > 0 && (
               <div className="sm-socials mt-auto pt-8 flex flex-col gap-0" aria-label="Social links">
-                <h3 className="sm-socials-title m-0 text-base font-medium text-(--sm-accent,#ff0000)">Socials</h3>
+                <div className='flex items-center justify-between'>
+                  <h3 className="sm-socials-title m-0 text-base font-medium text-(--sm-accent,#ff0000)">Socials</h3>
+                  
+                  <div className='flex-center justify-between gap-3'>
+                    {isAdmin && (
+                      <>
+                        <Link href={"/admin/dashbaord"}>
+                          <IconDashboard size={24} className='textmain' />
+                        </Link>
+                        {isLoggingOut ? (
+                          <IconLoader2 className='rotate' />
+                        ) : (
+                          <IconLogout onClick={handleLogout} />
+                        )}
+                      </>
+                    )}
+                    <Select
+                      name="locale"
+                      value={locale}
+                      defaultValue={locale}
+                      onValueChange={changeLocale}
+                    >
+                      <SelectTrigger
+                        id="locale"
+                        className="w-fit"
+                      >
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="ro">
+                            <Image
+                              src={roFlag}
+                              width={roFlag.width}
+                              height={roFlag.height}
+                              alt=''
+                              className='w-6 aspect-auto'
+                            />
+                            RO (ROU)
+                          </SelectItem>
+                          <SelectItem value="en">
+                            <Image
+                              src={usFlag}
+                              width={usFlag.width}
+                              height={usFlag.height}
+                              alt=''
+                              className='w-6 aspect-auto'
+                            />
+                            EN (US)
+                          </SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
                 <ul
                   className="sm-socials-list list-none m-0 p-0 flex flex-row items-center gap-4 flex-wrap"
                   role="list"

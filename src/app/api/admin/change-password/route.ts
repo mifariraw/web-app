@@ -2,9 +2,15 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@src/lib/mongodb";
 import { Admin } from "@src/models/Admin";
+import { verifyAdmin } from "@src/lib/verifyAdmin";
 
 export async function POST(req: Request) {
   try {
+    const isAdmin = await verifyAdmin(req)
+    if (!isAdmin) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 })
+    }
+
     await connectDB();
 
     const { oldPassword, newPassword } = await req.json();

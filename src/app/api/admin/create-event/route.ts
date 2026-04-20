@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@src/lib/mongodb";
 import { Event } from "@src/models/Event";
+import { verifyAdmin } from "@src/lib/verifyAdmin";
 
 export async function POST(req: Request) {
   try {
+    const isAdmin = await verifyAdmin(req)
+    if (!isAdmin) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 })
+    }
+
     await connectDB();
 
     const { data } = await req.json();

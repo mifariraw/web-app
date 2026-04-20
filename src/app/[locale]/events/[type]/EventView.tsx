@@ -24,6 +24,8 @@ const EventView = ({ type }: { type: string }) => {
   const t = useTranslations('EventsPage')
   const locale = useLocale()
   const [likedEvents, setLikedEvents] = useState<string[]>(() => {
+    if (typeof window === "undefined") return []
+
     const stored = localStorage.getItem("liked_events");
     if (!stored) return [];
     try {

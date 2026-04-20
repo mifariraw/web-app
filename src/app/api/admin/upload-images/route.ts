@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import cloudinary from "@src/lib/cloudinary";
+import { verifyAdmin } from "@src/lib/verifyAdmin";
 
 type UploadedImageResponse = {
   url: string;
@@ -18,6 +19,11 @@ type CloudinaryUploadResult = {
 
 export async function POST(req: NextRequest) {
   try {
+    const isAdmin = await verifyAdmin(req)
+    if (!isAdmin) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 })
+    }
+
     const form = await req.formData();
     const files = form.getAll("files") as File[];
     const folder = form.get("folder") as string;

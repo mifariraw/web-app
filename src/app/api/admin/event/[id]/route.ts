@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@src/lib/mongodb";
 import { Event } from "@src/models/Event";
+import { verifyAdmin } from "@src/lib/verifyAdmin";
 
 interface Params {
   params: Promise<{ id: string }>
@@ -8,6 +9,11 @@ interface Params {
 
 export async function GET(req: Request, { params }: Params) {
   try {
+    const isAdmin = await verifyAdmin(req)
+    if (!isAdmin) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 })
+    }
+
     await connectDB();
 
     const { id } = await params

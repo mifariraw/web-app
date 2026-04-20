@@ -1,10 +1,16 @@
-import { NextResponse } from "next/server";
+import { verifyAdmin } from "@src/lib/verifyAdmin";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST() {
+export async function POST(req: NextRequest) {
   try {
-    
+    const isAdmin = await verifyAdmin(req)
+    if (!isAdmin) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 })
+    }
 
     const res = NextResponse.json({ message: "Success" }, { status: 200 });
+
+    res.cookies.set("admin_token", "", { path: "/", expires: new Date(0) });
 
     return res;
     

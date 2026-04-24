@@ -31,14 +31,23 @@ export const EventCategorySection = ({ title, type }: EventCategorySectionProps)
   return (
     <section className="space-y-4">
       <div className="flex-center-between gap-8">
-        <h2 className="text-xl font-bold whitespace-nowrap">{title}</h2>
+        <h2 className={cn(
+          "text-xl font-bold whitespace-nowrap",
+          "xl:text-2xl"
+        )}>{title}</h2>
 
         <div className="flex-center gap-1">
-          <InputGroup className="max-w-40">
+          <InputGroup className={cn(
+            "max-w-40",
+            "sm:max-w-60"
+          )}>
             <InputGroupInput 
               placeholder="Cauta..." 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              className={cn(
+                "xl:text-xl"
+              )}
             />
             <InputGroupAddon>
               <IconSearch />
@@ -53,7 +62,10 @@ export const EventCategorySection = ({ title, type }: EventCategorySectionProps)
         </div>
       </div>
 
-      <div className={cn("flex items-start justify-start gap-4 overflow-x-scroll", loading && "overflow-hidden!")}>
+      <div className={cn(
+        "flex items-start justify-start gap-4 overflow-x-scroll",
+        loading && "overflow-hidden!"
+      )}>
         {loading ? (
           Array(4).fill(0).map((_, i) => (
             <EventCardSkeleton key={i} />
@@ -63,7 +75,7 @@ export const EventCategorySection = ({ title, type }: EventCategorySectionProps)
             <EventCard key={i} event={event} />
           ))
         ) : showNoResults ? (
-          <div className="flex-col w-full items-center justify-center py-10 gap-4">
+          <div className="flex flex-col w-full items-center justify-center py-10 gap-4">
             <IconXMark size={86} className="opacity-40" />
             <span className="text-base text-muted-foreground">Nu exista rezultate</span>
           </div>

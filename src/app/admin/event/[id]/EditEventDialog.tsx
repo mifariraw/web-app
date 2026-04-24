@@ -72,7 +72,7 @@ const EditEventDialog = ({ event }: { event: IEvent }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <span className='flex-center justify-center bg-black text-white hover:text-white w-full gap-2 py-1 rounded-sm'>
+        <span className={'flex-center justify-center bg-black text-white hover:text-white w-full gap-2 py-1 rounded-sm'}>
           <IconPencil size={16} />
           Editeaza
         </span>

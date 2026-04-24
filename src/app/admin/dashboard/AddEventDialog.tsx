@@ -96,7 +96,10 @@ const AddEventDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <span className='flex-center justify-center bg-gray-200 w-full gap-2 py-2 rounded-sm'>
+        <span className={cn(
+          'flex-center mx-auto justify-center bg-gray-200 w-full gap-2 py-2 rounded-sm',
+          "sm:w-2/3"
+        )}>
           <IconPlus size={20} />
           Adauga un Event nou
         </span>

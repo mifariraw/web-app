@@ -19,6 +19,7 @@ import {
   IconInfoCircle, IconMessage2, 
   IconPaint, IconUser 
 } from "@tabler/icons-react"
+import { cn } from "@src/lib/utils"
 
 const data = {
   navMain: [
@@ -79,7 +80,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="#">
                 <IconAperture className="size-5!" />
-                <span className="text-base font-semibold">MifariRaw</span>
+                <span className={cn(
+                  "text-base font-semibold",
+                  "sm:text-xl",
+                )}>MifariRaw</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

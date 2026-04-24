@@ -1,9 +1,7 @@
 import React from 'react'
-import Link from 'next/link'
 import { IconArrowRight } from '@tabler/icons-react'
-import aboutImage from "@public/images/home/about-image.png"
-import { cn } from '@src/lib/utils'
 import Image, { StaticImageData } from 'next/image';
+import { cn } from '@src/lib/utils';
 
 interface HomeCardProps {
   title: string;
@@ -21,7 +19,10 @@ const HomeCard = ({
   return (
     <div 
       onClick={handleClick}
-      className={`w-full rounded-3xl aspect-1/1.5 relative bg-cover`}
+      className={cn(
+        `w-full rounded-3xl aspect-1/1.5 relative bg-cover`,
+        // "lg:w-1/4 shrink-0"
+      )}
     >
       <Image
         src={bgImage}

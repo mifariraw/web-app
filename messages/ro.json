@@ -48,5 +48,9 @@
     "gallery": "Galerie",
     "noPhotos": "Nu exista poze pentru acest eveniment",
     "noEvents": "Nu exista evenimente pentru aceasta categorie"
+  },
+  "NotFound": {
+    "pageNotExisting": "Aceasta pagina nu exista",
+    "homeLink": "Acasa"
   }
 }

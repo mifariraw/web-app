@@ -16,7 +16,7 @@ export default function AdminLayout({
   return (
       <TooltipProvider>
         <AdminPanel>
-            {children}
+          {children}
         </AdminPanel>
       </TooltipProvider>
   );

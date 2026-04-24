@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from '@src/components/ui/button'
+import { cn } from '@src/lib/utils'
 import { IconLoader2, IconLogout } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -22,7 +23,12 @@ const Logout = () => {
   }
 
   return (
-    <Button onClick={handleLogout} className='px-6'>
+    <Button 
+      onClick={handleLogout} 
+      className={cn(
+        'px-6',
+      )}
+    >
       {isLoggingOut ? (
         <IconLoader2 className='rotate' />
       ) : (

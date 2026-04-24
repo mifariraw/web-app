@@ -41,7 +41,7 @@ const DeleteEventDialog = ({ id, folder, title }: DeleteEventDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <span className='flex-center justify-center bg-gray-200 hover:bg-gray-200 text-destructive hover:text-destructive w-full gap-2 py-1 rounded-sm'>
+        <span className={'flex-center justify-center bg-gray-200 hover:bg-gray-200 text-destructive hover:text-destructive w-full gap-2 py-1 rounded-sm'}>
           <IconTrash size={16} />
           Sterge
         </span>

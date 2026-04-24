@@ -3,13 +3,14 @@
 import EventSkeleton from '@src/components/skeletons/EventSkeleton'
 import { Separator } from '@src/components/ui/separator'
 import { useEvents } from '@src/hooks/useEvents'
-import { IconCalendarEvent, IconLanguage, IconLibraryPhoto, IconMapPin, IconReload, IconThumbUp } from '@tabler/icons-react'
+import { IconCalendarEvent, IconLanguage, IconLanguageHiragana, IconLibraryPhoto, IconMapPin, IconReload, IconThumbUp } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { ro } from 'date-fns/locale'
 import Image from 'next/image'
 import dynamic from 'next/dynamic';
 import Gallery from './EventGallery'
 import { Button } from '@src/components/ui/button'
+import { cn } from '@src/lib/utils'
 
 const EditEventDialog = dynamic(() => import("./EditEventDialog"), {
   loading: () => <div className="w-8 h-8" />,
@@ -39,8 +40,10 @@ const EventView = ({ id }: { id: string }) => {
   if (loading || !currentEvent) {
     return <EventSkeleton />;
   }
-
+  
   return (
+    <>
+    <EventSkeleton />
     <div className='p-4 h-full overflow-y-auto relative'>
       <Button
         variant="outline"
@@ -50,44 +53,95 @@ const EventView = ({ id }: { id: string }) => {
         <IconReload />
       </Button>
 
-      <section className='w-full flex flex-col items-center justify-center gap-4'>
-        <div className='relative w-3/5'>
-          <Image
-            src={currentEvent.coverImageUrl}
-            width={400}
-            height={400}
-            className='w-full rounded-sm'
-            alt={currentEvent.title}
-          />
-          <EditImageDialog 
-            id={currentEvent._id.toString()}
-            folder={currentEvent.type}
-          />
-        </div>
-        <h1 className="text-2xl font-bold">{currentEvent.title}</h1>
-      
-        <div className='flex flex-col w-full items-start gap-1'>
-          <div className='flex-center gap-2'>
-            <IconMapPin />
-            <span>{currentEvent.location}</span>
+      <section className={cn(
+        'w-full flex flex-col items-center justify-center gap-4',
+        "xl:flex-row! xl:justify-around xl:px-12 xl:pt-4"
+      )}>
+        <div className={cn(
+          "flex flex-col w-full gap-4 items-center",
+          "xl:w-3/5",
+          "xl:w-1/2"
+        )}>
+          <div className={cn(
+            'relative w-3/5',
+            "sm:w-2/5",
+            "xl:w-full",
+          )}>
+            <Image
+              src={currentEvent.coverImageUrl}
+              width={400}
+              height={400}
+              className='w-full rounded-sm'
+              alt={currentEvent.title}
+            />
+            <EditImageDialog 
+              id={currentEvent._id.toString()}
+              folder={currentEvent.type}
+            />
           </div>
-          <div className='flex-center gap-2'>
-            <IconCalendarEvent />
-            <span>{format(currentEvent.date, "PPP", { locale: ro })}</span>
-          </div>
-          <div className='flex-center gap-2'>
-            <IconLanguage />
-            <span>{currentEvent.titleTranslation}</span>
-          </div>
+          <h1 className={cn(
+            "text-2xl font-bold",
+            "sm:text-3xl"
+          )}>{currentEvent.title}</h1>
         </div>
 
-        <div className='flex-center gap-2 w-full'>
-          <EditEventDialog event={currentEvent} />
-          <DeleteEventDialog 
-            id={currentEvent._id.toString()}
-            folder={currentEvent.type}
-            title={currentEvent?.title}
-          />
+        <div className={cn(
+          "flex flex-col w-full gap-2",
+          "xl:px-8 xl:gap-16"
+        )}>
+          <div className={cn(
+            'flex flex-col w-full items-start gap-1',
+            "sm:text-xl",
+          )}>
+            <div className={cn(
+              "flex flex-col gap-1 items-start",
+              "xl:gap-2 xl:text-2xl"
+            )}>
+              <div className={cn(
+                'flex-center gap-2',
+                "xl:gap-1"
+              )}>
+                <IconMapPin />
+                <span>{currentEvent.location}</span>
+              </div>
+              <div className={cn(
+                'flex-center gap-2',
+                "xl:gap-1"
+              )}>
+                <IconCalendarEvent />
+                <span>{format(currentEvent.date, "PPP", { locale: ro })}</span>
+              </div>
+            </div>
+            <div className={cn(
+              "flex flex-col itemms-start gap-1",
+              "xl:gap-2 xl:text-2xl"
+            )}>
+              <div className={cn(
+                'flex items-start gap-2',
+                "xl:gap-1"
+              )}>
+                <IconLanguage />
+                <span>{currentEvent.titleTranslation}</span>
+              </div>
+              <div className={cn(
+                'flex items-start gap-2',
+                "xl:gap-1"
+              )}>
+                <IconLanguageHiragana />
+                <span>{currentEvent.locationTranslation}</span>
+              </div>
+            </div>
+          </div>
+          <div className={cn(
+            'flex-center gap-2 w-full',
+          )}>
+            <EditEventDialog event={currentEvent} />
+            <DeleteEventDialog 
+              id={currentEvent._id.toString()}
+              folder={currentEvent.type}
+              title={currentEvent?.title}
+            />
+          </div>
         </div>
       </section>
 
@@ -97,9 +151,14 @@ const EventView = ({ id }: { id: string }) => {
         <div className="flex-center-between">
           <h2 className="flex-center gap-2 whitespace-nowrap">
             <IconLibraryPhoto size={24} />
-            <span className='text-xl font-bold'>Galerie</span>
+            <span className={cn(
+              'text-xl font-bold',
+              "xl:text-2xl"
+            )}>Galerie</span>
             {currentEvent?.images && (
-              <span>({currentEvent?.images.length} imagini)</span>
+              <span className={cn(
+                "xl:text-lg"
+              )}>({currentEvent?.images.length} imagini)</span>
             )}
           </h2>
 
@@ -123,6 +182,7 @@ const EventView = ({ id }: { id: string }) => {
         />
       </section>
     </div>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import ChangePasswordForm from './ChangePasswordForm';
 import { Separator } from '@src/components/ui/separator';
 import Logout from './Logout';
 import { EventCategorySection } from './EventCategorySection';
+import { cn } from '@src/lib/utils';
 
 const AddEventDialog = dynamic(() => import("./AddEventDialog"), {
 	loading: () => <div className="w-8 h-8" />,
@@ -12,7 +13,10 @@ const AddEventDialog = dynamic(() => import("./AddEventDialog"), {
 
 const Dashboard = () => {
   return (
-    <div className='px-2 py-4'>
+    <div className={cn(
+      'px-2 py-4',
+      "sm:px-4"
+    )}>
       <AddEventDialog />
       <Separator className='my-4' />
 
@@ -40,7 +44,6 @@ const Dashboard = () => {
       />
 
       <Separator className='my-4' />
-      <h2 className='text-lg font-semibold mb-2'>Schimba Parola</h2>
       <ChangePasswordForm />
 
       <Separator className='my-4' />

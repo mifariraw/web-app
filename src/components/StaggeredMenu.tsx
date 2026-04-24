@@ -539,7 +539,7 @@ export const StaggeredMenu = ({
                   <h3 className="sm-socials-title m-0 text-base font-medium text-(--sm-accent,#ff0000)">Socials</h3>
                   
                   <div className='flex-center justify-between gap-3'>
-                    {isAdmin && (
+                    {isAdmin ? (
                       <>
                         <Link href={"/admin/dashbaord"}>
                           <IconDashboard size={24} className='textmain' />
@@ -550,6 +550,10 @@ export const StaggeredMenu = ({
                           <IconLogout onClick={handleLogout} />
                         )}
                       </>
+                    ) : (
+                      <Link href={"/login"}>
+                        <IconLogout className='textmain' />
+                      </Link>
                     )}
                     <Select
                       name="locale"

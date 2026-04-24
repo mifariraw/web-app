@@ -48,5 +48,9 @@
     "gallery": "Gallery",
     "noPhotos": "There are no photos for this event",
     "noEvents": "There are no events for this category"
+  },
+  "NotFound": {
+    "pageNotExisting": "This page doesn't exist",
+    "homeLink": "Home"
   }
 }

@@ -13,6 +13,7 @@ import { Input } from "@src/components/ui/input"
 import { Button } from '@src/components/ui/button'
 import { IconLoader2 } from '@tabler/icons-react'
 import { changePassword } from '@src/lib/admin'
+import { cn } from '@src/lib/utils'
 
 export const formSchema = z.object({
   oldPassword: z.string().min(6, "Parola veche este obligatorie"),
@@ -51,19 +52,39 @@ const ChangePasswordForm = () => {
 
   return (
     <div>
-      <form id="form-change-password" onSubmit={form.handleSubmit(onSubmit)}>
-        <FieldGroup>
-          <div className='flex-center gap-2'>
+      <h2 className={cn(
+        'text-lg font-semibold mb-2',
+        "xl:text-2xl"
+      )}>Schimba Parola</h2>
+      <form 
+        id="form-change-password" 
+        className={cn(
+          "xl:flex"
+        )}
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <FieldGroup
+          className={cn(
+            "xl:flex xl:flex-row"
+          )}
+        >
+          <div className={cn(
+            'flex-center gap-2',
+            "xl:flex-1/2"
+          )}>
             <Controller
               name="oldPassword"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className='flex-1/2'>
-                  <div className="flex-center-between">
-                    <FieldLabel htmlFor="form-oldPassword">
+                    <FieldLabel 
+                      htmlFor="form-oldPassword"
+                      className={cn(
+                        "xl:text-xl"
+                      )}
+                    >
                       Parola veche
                     </FieldLabel>
-                  </div>
                   <Input
                     {...field}
                     type='password'
@@ -78,11 +99,14 @@ const ChangePasswordForm = () => {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className='flex-1/2'>
-                  <div className="flex-center-between">
-                    <FieldLabel htmlFor="form-newPassword">
-                      Parola nouă
-                    </FieldLabel>
-                  </div>
+                  <FieldLabel 
+                    htmlFor="form-newPassword"
+                    className={cn(
+                      "xl:text-xl"
+                    )}
+                  >
+                    Parola nouă
+                  </FieldLabel>
                   <Input
                     {...field}
                     id="form-newPassword"
@@ -94,17 +118,23 @@ const ChangePasswordForm = () => {
               )}
             />
           </div>
-          <div className='flex items-end gap-2'>
+          <div className={cn(
+            'flex items-end gap-2',
+            "xl:flex-1/2"
+          )}>
             <Controller
               name="confirmNewPassword"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className='flex-1/2'>
-                  <div className="flex-center-between">
-                    <FieldLabel htmlFor="form-confirmNewPassword">
-                      Confirmara Parola
-                    </FieldLabel>
-                  </div>
+                  <FieldLabel 
+                    htmlFor="form-confirmNewPassword"
+                    className={cn(
+                      "xl:text-xl"
+                    )}
+                  >
+                    Confirmara Parola
+                  </FieldLabel>
                   <Input
                     {...field}
                     id="form-confirmNewPassword"
@@ -118,7 +148,10 @@ const ChangePasswordForm = () => {
             />
             <Button 
               type="submit" 
-              className="flex-1/2"
+              className={cn(
+                "flex-1/2"
+              )}
+              disabled={isChangingPassword || !form.formState.isDirty}
               form='form-change-password'
             >
               {isChangingPassword ? (

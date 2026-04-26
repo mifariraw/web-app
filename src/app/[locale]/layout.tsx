@@ -1,7 +1,8 @@
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@src/i18n/routing';
-import MobileNavbar from '@src/components/MobileNavbar';
+import MobileNavbar from '@components/MobileNavbar';
+import Navbar from '@components/Navbar';
  
 type Props = {
   children: React.ReactNode;
@@ -17,6 +18,7 @@ export default async function LocaleLayout({children, params}: Props) {
   return (
     <NextIntlClientProvider>
       <MobileNavbar />
+      <Navbar />
       {children}
     </NextIntlClientProvider>
   )

@@ -5,7 +5,7 @@ import { gsap } from 'gsap';
 import { StaggeredMenuProps } from "@lib/interfaces";
 import Image from 'next/image';
 import Link from 'next/link';
-import { IconDashboard, IconLoader2, IconLogout } from '@tabler/icons-react';
+import { IconDashboard, IconLoader2, IconLogin, IconLogout } from '@tabler/icons-react';
 import { cn } from '@src/lib/utils';
 import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from "@src/i18n/navigation";
@@ -47,7 +47,6 @@ export const StaggeredMenu = ({
   const curentPathname = usePathname()
   const params = useParams()
   const router = useRouter()
-
 
   const panelRef = useRef<HTMLDivElement | null>(null);
   const preLayersRef = useRef<HTMLDivElement | null>(null);
@@ -552,7 +551,7 @@ export const StaggeredMenu = ({
                       </>
                     ) : (
                       <Link href={"/login"}>
-                        <IconLogout className='textmain' />
+                        <IconLogin className='textmain' />
                       </Link>
                     )}
                     <Select

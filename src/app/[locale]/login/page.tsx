@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 
 const Login = () => {
-  const t = useTranslations('LoginForm');
+  const t = useTranslations('Login');
 
   return (
     <div className='px-8 pt-20 flex flex-col items-center justify-center h-[calc(100vh-80px)]!'>

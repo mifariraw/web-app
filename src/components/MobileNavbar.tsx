@@ -50,6 +50,7 @@ const MobileNavbar = () => {
         colors={['#B19EEF', '#5227FF']}
         logoUrl={logo}
         accentColor="#5227FF"
+        className='lg:hidden z-10'
         // onMenuOpen={() => console.log('Menu opened')}
         // onMenuClose={() => console.log('Menu closed')}
       />

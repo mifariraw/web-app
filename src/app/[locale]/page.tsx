@@ -2,7 +2,9 @@
 
 import HomeCard from "@src/components/HomeCard";
 import { Swiper, SwiperSlide } from "swiper/react";
-import aboutImage from "@public/images/home/about-image.png"
+import aboutImage from "@public/images/home/about-img.png"
+import concertsImage from "@public/images/home/concerts-img.jpg"
+import portraitsImage from "@public/images/home/portraits-img.jpg"
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import { IconChevronLeft, IconChevronRight, IconPointFilled } from "@tabler/icons-react";
@@ -22,7 +24,7 @@ const cardsContent = [
   {
     title: "concertsCard",
     subtitle: "",
-    bgImage: aboutImage,
+    bgImage: concertsImage,
     url: "concert"
   },
   {
@@ -34,7 +36,7 @@ const cardsContent = [
   {
     title: "portraitsCard",
     subtitle: "",
-    bgImage: aboutImage,
+    bgImage: portraitsImage,
     url: "portraits"
   },
 ]
@@ -42,79 +44,93 @@ const cardsContent = [
 export default function Home() {
   const t = useTranslations('Home');
   const router = useRouter()
+  const [mobileSwiper, setMobileSwiper] = useState<SwiperType | null>(null)
   const [swiper, setSwiper] = useState<SwiperType | null>(null)
   const [activeIndex, setActiveIndex] = useState<number>(0)
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center font-sans dark:bg-black pt-24">
-      <main className="flex flex-1 w-full flex-col items-center justify-start px-4 mt-8  dark:bg-black sm:items-start">
-        <Swiper
-          onSwiper={setSwiper}
-          grabCursor
-          centeredSlides
-          slidesPerView={3.25}
-          coverflowEffect={{
-            rotate: 0,
-            stretch: 0,
-            depth: 200,
-            modifier: 1,
-            slideShadows: false
-          }}
-          className={cn(
-            "hidden! w-full relative",
-            "lg:flex!",
-          )}
-          onSlideChange={(e) => setActiveIndex(e.activeIndex)}
-        >
-          {cardsContent.map((card, i) => (
-            <SwiperSlide
-              key={i}
-              className={cn(
-                "w-full flex items-center justify-center px-16 transition-all! duration-300 ease-in-out",
-                "lg:px-6",
-                "2xl:px-10"
-              )}
-            >
-              <HomeCard 
-                title={t(card.title)}
-                subtitle={card.subtitle}
-                bgImage={card.bgImage}
-                handleClick={() => router.replace("/events/" + card.url)}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+      <main className={cn(
+        "flex flex-1 w-full flex-col items-center justify-start px-4 mt-4 dark:bg-black sm:items-start",
+        "xl:justify-center xl:mt-8"
+      )}>
+        <div className="w-full hidden lg:block">
+          <Swiper
+            onSwiper={setSwiper}
+            centeredSlides
+            initialSlide={1}
+            slidesPerView={3.25}
+            coverflowEffect={{
+              rotate: 0,
+              stretch: 0,
+              depth: 100,
+              modifier: 1,
+              slideShadows: false
+            }}
+            className={"w-full relative"}
+            onSlideChange={(e) => setActiveIndex(e.activeIndex)}
+          >
+            {cardsContent.map((card, i) => (
+              <SwiperSlide
+                key={i}
+                className={cn(
+                  "w-full flex items-center justify-center px-16 transition-all duration-300 ease-in-out",
+                  "lg:px-6",
+                  "2xl:px-10"
+                )}
+                onClick={() => {
+                  if (activeIndex !== i) {
+                    swiper?.slideTo(i)
+              
+                    return
+                  }
+                  return router.replace("/events/" + card.url)
+                }}
+              >
+                <HomeCard 
+                  title={t(card.title)}
+                  subtitle={card.subtitle}
+                  bgImage={card.bgImage}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
         
-        <Swiper
-          grabCursor
-          centeredSlides
-          slidesPerView={"auto"}
-          className={cn(
-            "w-full relative",
-            "sm:w-3/4",
-            "md:w-1/2",
-            "lg:hidden!"
-          )}
-          onSlideChange={(e) => setActiveIndex(e.activeIndex)}
-        >
-          {cardsContent.map((card, i) => (
-            <SwiperSlide
-              key={i}
-              className={"w-full flex items-center justify-center px-3 transition-all! duration-300 ease-in-out"}
-            >
-              <HomeCard 
-                title={t(card.title)}
-                subtitle={card.subtitle}
-                bgImage={card.bgImage}
-                handleClick={() => router.replace("/events/" + card.url)}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div className="w-full lg:hidden">
+          <Swiper
+            onSwiper={setMobileSwiper}
+            centeredSlides
+            slidesPerView={"auto"}
+            className={cn(
+              "w-full relative",
+              "sm:w-3/4",
+              "md:w-1/2",
+            )}
+            onSlideChange={(e) => setActiveIndex(e.activeIndex)}
+          >
+            {cardsContent.map((card, i) => (
+              <SwiperSlide
+                key={i}
+                className={cn(
+                  "w-full flex items-center justify-center px-3 transition-all duration-300 ease-in-out",
+                  activeIndex === i && "cursor-pointer"
+                )}
+                onClick={() => router.replace("/events/" + card.url)}
+              >
+                <HomeCard 
+                  title={t(card.title)}
+                  subtitle={card.subtitle}
+                  bgImage={card.bgImage}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
 
         <div className={cn(
           "hidden items-center absolute w-fit bottom-4 left-1/2 -translate-x-1/2 justify-center gap-4",
-          "lg:flex lg:bottom-2"
+          "lg:bottom-2"
         )}>
           <div className={cn(
             "flex-center gap-1 bg-black/30 backdrop-blur-md mx-auto p-2 rounded-full",

@@ -26,6 +26,7 @@ import { IconLoader2 } from "@tabler/icons-react"
 import { loginAdmin } from "@src/lib/admin"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
+import { cn } from "@src/lib/utils"
 
 export const createFormSchema = (t: (key: string) => string) =>
   z.object({
@@ -73,7 +74,10 @@ export function LoginForm() {
   return (
     <Card className="w-full sm:max-w-md z-10">
       <CardHeader>
-        <CardTitle className="text-2xl font-semibold flex items-center justify-between">
+        <CardTitle className={cn(
+          "text-2xl font-semibold flex items-center justify-between",
+          "xl:text-3xl"
+        )}>
           Log In
         </CardTitle>
         <CardDescription>
@@ -88,7 +92,10 @@ export function LoginForm() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <div className="flex-center-between">
-                    <FieldLabel htmlFor="form-email" className="text-[#5227FF]!">
+                    <FieldLabel htmlFor="form-email" className={cn(
+                      "text-[#5227FF]!",
+                      "xl:text-lg"
+                    )}>
                       Email
                     </FieldLabel>
                     {fieldState.invalid && (
@@ -99,6 +106,7 @@ export function LoginForm() {
                     {...field}
                     id="form-email"
                     aria-invalid={fieldState.invalid}
+                    className="xl:text-lg"
                   />
                 </Field>
               )}
@@ -109,7 +117,10 @@ export function LoginForm() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <div className="flex-center-between">
-                    <FieldLabel htmlFor="form-password" className="text-[#5227FF]!">
+                    <FieldLabel htmlFor="form-password" className={cn(
+                      "text-[#5227FF]!",
+                      "xl:text-lg"
+                    )}>
                       Password
                     </FieldLabel>
                     {fieldState.invalid && (
@@ -122,6 +133,7 @@ export function LoginForm() {
                     type="password"
                     aria-invalid={fieldState.invalid}
                     autoComplete="off"
+                    className="xl:text-lg"
                   />
                 </Field>
               )}
@@ -135,7 +147,7 @@ export function LoginForm() {
             type="button" 
             variant="outline" 
             onClick={() => form.reset()}
-            className="flex-1/4"
+            className={cn("flex-1/4", "xl:text-xl, xl:py-4!")}
           >
             {t('reset')}
           </Button>
@@ -143,7 +155,10 @@ export function LoginForm() {
             type="submit" 
             disabled={isLoggingIn || !form.formState.isDirty}
             form="form-login"
-            className="flex-3/4 bg-[#5227FF] text-white hover:bg-main-accent/90"
+            className={cn(
+              "flex-3/4 bg-[#5227FF] text-white hover:bg-main-accent/90",
+              "xl:text-xl xl:py-4!"
+            )}
           >
             {isLoggingIn ? (
               <IconLoader2 className="rotate" size={20} />

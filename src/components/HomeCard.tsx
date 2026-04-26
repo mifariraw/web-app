@@ -6,24 +6,16 @@ import { cn } from '@src/lib/utils';
 interface HomeCardProps {
   title: string;
   subtitle?: string;
-  bgImage: string | StaticImageData
-  handleClick: () => void
+  bgImage: string | StaticImageData,
 }
 
 const HomeCard = ({ 
   title, 
   subtitle, 
-  bgImage,
-  handleClick
+  bgImage
 }: HomeCardProps) => {
   return (
-    <div 
-      onClick={handleClick}
-      className={cn(
-        `w-full rounded-3xl aspect-1/1.5 relative bg-cover`,
-        // "lg:w-1/4 shrink-0"
-      )}
-    >
+    <div className='w-full rounded-3xl aspect-1/1.5 relative bg-cover'>
       <Image
         src={bgImage}
         alt=''
@@ -32,7 +24,10 @@ const HomeCard = ({
       />
 
       <div className='z-10 h-full relative w-full flex flex-col justify-between px-6 py-4'>
-        <span className='nohemi text-xl text-shadow text-white'>{title}</span>
+        <span className={cn(
+          'nohemi text-xl text-shadow text-white whitespace-nowrap',
+          "lg:text-lg lg:nohemi"
+        )}>{title}</span>
         
         <div className={'flex-center-between w-full'}>
           {(subtitle && subtitle.length > 0) && 

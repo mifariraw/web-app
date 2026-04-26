@@ -59,8 +59,7 @@ export default function Gallery({
       })),
       {
         containerWidth: width,
-        targetRowHeight: width < 600 ? 120 : 250,
-        // gap: 8,
+        targetRowHeight: width < 600 ? 120 :( width < 1200 ? 250 : 320),
       }
     );
   }, [photos, width]);
@@ -220,7 +219,12 @@ export default function Gallery({
       </div>
       <div
         ref={containerRef}
-        className="relative h-100 overflow-y-scroll mt-2"
+        className={cn(
+          "relative h-100 overflow-y-scroll mt-2",
+          "sm:h-150",
+          "xl:h-200",
+          "2xl:h-250"
+        )}
       >
         {layout?.boxes.map((box, i) => {
           const photo = photos[i];

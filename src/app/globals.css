@@ -1,6 +1,6 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -118,8 +118,8 @@
 }
 
 @font-face {
-  font-family: "Nohemi";
-  src: url("/fonts/Nohemi-Medium.otf") format("opentype");
+  font-family: 'Nohemi';
+  src: url('/fonts/Nohemi-Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
 }
@@ -175,7 +175,7 @@ nextjs-portal {
 }
 
 .nohemi {
-  font-family: "Nohemi";
+  font-family: 'Nohemi';
   text-transform: uppercase;
 }
 

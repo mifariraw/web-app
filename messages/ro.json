@@ -55,5 +55,17 @@
   "NotFound": {
     "pageNotExisting": "Aceasta pagina nu exista",
     "homeLink": "Acasa"
+  },
+  "Common": {
+    "success": {
+      "general": "Succes",
+      "login": "Logged In",
+      "contact": "Mesaj trimis cu succes"
+    },
+    "errors": {
+      "general": "Eroare",
+      "login": "Eroare",
+      "contact": "Eroare in trimiterea mesajului"
+    }
   }
 }

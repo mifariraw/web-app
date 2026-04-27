@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import { IEvent } from "@src/models/interfaces"
-import { useEffect, useState, useCallback } from "react"
-import { useDebounce } from "./useDebounce"
+import { IEvent } from '@src/models/interfaces'
+import { useEffect, useState, useCallback } from 'react'
+import { useDebounce } from './useDebounce'
 
-export function useEvents(type: string, endpoint: string = "/api/admin/events") {
+export function useEvents(type: string, endpoint: string = '/api/admin/events') {
   const [events, setEvents] = useState<IEvent[]>([])
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
 
   const debouncedSearch = useDebounce(search, 300)

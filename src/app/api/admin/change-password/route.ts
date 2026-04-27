@@ -1,14 +1,14 @@
-import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import { connectDB } from "@src/lib/mongodb";
-import { Admin } from "@src/models/Admin";
-import { verifyAdmin } from "@src/lib/verifyAdmin";
+import { NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
+import { connectDB } from '@lib/mongodb';
+import { Admin } from '@src/models/Admin';
+import { verifyAdmin } from '@lib/verifyAdmin';
 
 export async function POST(req: Request) {
   try {
     const isAdmin = await verifyAdmin(req)
     if (!isAdmin) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 })
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 403 })
     }
 
     await connectDB();
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
     if (!oldPassword || !newPassword) {
       return NextResponse.json(
-        { message: "Missing old or new password" },
+        { message: 'Missing old or new password' },
         { status: 400 }
       );
     }
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
     if (!admin) {
       return NextResponse.json(
-        { message: "Admin user not found" },
+        { message: 'Admin user not found' },
         { status: 404 }
       );
     }
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
     if (!arePasswordsMatching) {
       return NextResponse.json(
-        { message: "Old password is incorrect" },
+        { message: 'Old password is incorrect' },
         { status: 401 }
       );
     }
@@ -44,14 +44,14 @@ export async function POST(req: Request) {
     admin.password = hashedNewPassword;
     await admin.save();
 
-    const res = NextResponse.json({ message: "Success" }, { status: 200 });
+    const res = NextResponse.json({ message: 'Success' }, { status: 200 });
 
     return res;
     
   } catch (error: unknown) {
-    console.error("Route Error:", error);
+    console.error('Route Error:', error);
     const res = NextResponse.json(
-      { message: "Internal Server Error", error: (error as Error).message },
+      { message: 'Internal Server Error', error: (error as Error).message },
       { status: 500 }
     );
     

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import cloudinary from "@src/lib/cloudinary";
-import { verifyAdmin } from "@src/lib/verifyAdmin";
+import { NextRequest, NextResponse } from 'next/server';
+import cloudinary from '@lib/cloudinary';
+import { verifyAdmin } from '@lib/verifyAdmin';
 
 type UploadedImageResponse = {
   url: string;
@@ -21,15 +21,15 @@ export async function POST(req: NextRequest) {
   try {
     const isAdmin = await verifyAdmin(req)
     if (!isAdmin) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 })
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 403 })
     }
 
     const form = await req.formData();
-    const files = form.getAll("files") as File[];
-    const folder = form.get("folder") as string;
+    const files = form.getAll('files') as File[];
+    const folder = form.get('folder') as string;
 
     if (!files.length) {
-      return NextResponse.json({ error: "No files provided" }, { status: 400 });
+      return NextResponse.json({ error: 'No files provided' }, { status: 400 });
     }
 
     const uploadSingle = async (file: File): Promise<UploadedImageResponse> => {
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(uploadedImages);
   } catch (err) {
-    console.error("Cloudinary error:", err);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    console.error('Cloudinary error:', err);
+    return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
   }
 }

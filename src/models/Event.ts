@@ -2,8 +2,8 @@ import mongoose, {
   Schema, 
   model, 
   models,
-} from "mongoose";
-import { IEvent } from "./interfaces";
+} from 'mongoose';
+import { IEvent } from './interfaces';
 
 const EventImageSchema = new Schema(
   {
@@ -28,7 +28,7 @@ const EventSchema = new Schema<IEvent>(
     },
     type: {
       type: String,
-      enum: ["concert", "event", "personal_project", "portraits"],
+      enum: ['concert', 'event', 'personal_project', 'portraits'],
       required: true
     },
     location: {
@@ -60,4 +60,4 @@ const EventSchema = new Schema<IEvent>(
   { timestamps: true }
 );
 
-export const Event = (models.Event as mongoose.Model<IEvent>) || model<IEvent>("Event", EventSchema);
+export const Event = (models.Event as mongoose.Model<IEvent>) || model<IEvent>('Event', EventSchema);

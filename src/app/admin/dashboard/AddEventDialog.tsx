@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import React, { useState } from 'react'
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Controller, useForm } from "react-hook-form"
-import * as z from "zod"
-import { Calendar } from "@src/components/ui/calendar"
+import { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useForm } from 'react-hook-form'
+import * as z from 'zod'
+import { Calendar } from '@components/ui/calendar'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@src/components/ui/popover"
+} from '@components/ui/popover'
 import {
   Dialog,
   DialogClose,
@@ -19,13 +19,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@src/components/ui/dialog"
+} from '@components/ui/dialog'
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@src/components/ui/field"
+} from '@components/ui/field'
 import {
   Select,
   SelectContent,
@@ -33,26 +33,29 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@src/components/ui/select"
-import { Input } from "@src/components/ui/input"
-import { Button } from "@src/components/ui/button"
-import { IconCalendar, IconLoader2, IconPlus } from '@tabler/icons-react'
-import ImageDropzone from '@src/components/ImageDropzone'
+} from '@components/ui/select'
+import { Input } from '@components/ui/input'
+import { Button } from '@components/ui/button'
+import { 
+  IconCalendar, IconLoader2, IconPlus 
+} from '@tabler/icons-react'
+import ImageDropzone from '@components/ImageDropzone'
 import { format } from 'date-fns/format'
-import { cn } from '@src/lib/utils'
+import { cn } from '@lib/utils'
 import { ro } from 'date-fns/locale'
-import { createNewEvent } from '@src/lib/admin'
+import { createNewEvent } from '@lib/admin'
+import { toast } from 'sonner'
 
 export const formSchema = z.object({
-  title: z.string().min(1, "Titlul este obligatoriu"),
-  titleTranslation: z.string().min(1, "Traducerea este obligatorie"),
+  title: z.string().min(1, 'Titlul este obligatoriu'),
+  titleTranslation: z.string().min(1, 'Traducerea este obligatorie'),
   type: z.enum(
-    ["concert", "event", "personal_project", "portraits"]
+    ['concert', 'event', 'personal_project', 'portraits']
   ),
-  location: z.string().min(1, "Locația este obligatorie"),
-  locationTranslation: z.string().min(1, "Traducerea este obligatorie"),
+  location: z.string().min(1, 'Locația este obligatorie'),
+  locationTranslation: z.string().min(1, 'Traducerea este obligatorie'),
   date: z.date(),
-    // .refine((date) => date > new Date(), "Data trebuie să fie în viitor"),
+    // .refine((date) => date > new Date(), 'Data trebuie să fie în viitor'),
   coverImageUrl: z.instanceof(File),
 })
 
@@ -63,11 +66,11 @@ const AddEventDialog = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      titleTranslation: "",
-      type: "event",
-      location: "",
-      locationTranslation: "",
+      title: '',
+      titleTranslation: '',
+      type: 'event',
+      location: '',
+      locationTranslation: '',
       date: new Date(),
       coverImageUrl: undefined as unknown as File,
     },
@@ -76,21 +79,26 @@ const AddEventDialog = () => {
   const handleImageSelect = (file: File | null) => {
     if (file) {
       
-      form.setValue("coverImageUrl", file);
-      form.trigger("coverImageUrl");
+      form.setValue('coverImageUrl', file);
+      form.trigger('coverImageUrl');
     } else {
-      form.setValue("coverImageUrl", undefined as unknown as File);
+      form.setValue('coverImageUrl', undefined as unknown as File);
     }
   };
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsCreatingEvent(true)
 
-    createNewEvent(data)
-      .finally(() => {
-        setIsCreatingEvent(false)
-        setOpen(false)
-      })
+    try {
+      await createNewEvent(data)
+
+      toast.success('Eventul a fost creat')
+    } catch {
+      toast.error('Eroare in crearea eventului')
+    }
+    
+    setOpen(false)
+    setIsCreatingEvent(false)
   }
   
   return (
@@ -98,7 +106,7 @@ const AddEventDialog = () => {
       <DialogTrigger asChild>
         <span className={cn(
           'flex-center mx-auto justify-center bg-gray-200 w-full gap-2 py-2 rounded-sm',
-          "sm:w-2/3"
+          'sm:w-2/3'
         )}>
           <IconPlus size={20} />
           Adauga un Event nou
@@ -108,29 +116,29 @@ const AddEventDialog = () => {
         <DialogHeader>
           <DialogTitle>Adauga un nou Event</DialogTitle>
         </DialogHeader>
-        <DialogDescription className={"flex flex-col gap-2"}>
+        <DialogDescription className={'flex flex-col gap-2'}>
           <ImageDropzone 
-            selectText="Alege imaginea de coperta"
+            selectText='Alege imaginea de coperta'
             onFileSelect={handleImageSelect}
             hasError={!!form.formState.errors.coverImageUrl}
           />
 
           {form.formState.errors.coverImageUrl && (
-            <p className="text-sm font-medium text-destructive">
+            <p className='text-sm font-medium text-destructive'>
               {form.formState.errors.coverImageUrl.message}
             </p>
           )}
         </DialogDescription>
 
-        <form id="form-new-event" onSubmit={form.handleSubmit(onSubmit)}>
+        <form id='form-new-event' onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
-              name="title"
+              name='title'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <div className="flex-center-between">
-                    <FieldLabel htmlFor="form-title">
+                  <div className='flex-center-between'>
+                    <FieldLabel htmlFor='form-title'>
                       Titlu
                     </FieldLabel>
                     {fieldState.invalid && (
@@ -139,19 +147,19 @@ const AddEventDialog = () => {
                   </div>
                   <Input
                     {...field}
-                    id="form-title"
+                    id='form-title'
                     aria-invalid={fieldState.invalid}
                   />
                 </Field>
               )}
             />
             <Controller
-              name="titleTranslation"
+              name='titleTranslation'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <div className="flex-center-between">
-                    <FieldLabel htmlFor="form-title-translation">
+                  <div className='flex-center-between'>
+                    <FieldLabel htmlFor='form-title-translation'>
                       Traducere Titlu
                     </FieldLabel>
                     {fieldState.invalid && (
@@ -160,19 +168,19 @@ const AddEventDialog = () => {
                   </div>
                   <Input
                     {...field}
-                    id="form-title-translation"
+                    id='form-title-translation'
                     aria-invalid={fieldState.invalid}
                   />
                 </Field>
               )}
             />
             <Controller
-              name="type"
+              name='type'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <div className="flex-center-between">
-                    <FieldLabel htmlFor="form-type">
+                  <div className='flex-center-between'>
+                    <FieldLabel htmlFor='form-type'>
                       Tip Event
                     </FieldLabel>
                     {fieldState.invalid && (
@@ -186,18 +194,18 @@ const AddEventDialog = () => {
                     
                   >
                     <SelectTrigger
-                      id="form-type"
+                      id='form-type'
                       aria-invalid={fieldState.invalid}
-                      className="w-full"
+                      className='w-full'
                     >
-                      <SelectValue placeholder="Tip Event" />
+                      <SelectValue placeholder='Tip Event' />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="event">Eveniment</SelectItem>
-                        <SelectItem value="concert">Concert/Festival</SelectItem>
-                        <SelectItem value="personal_project">Proiect Personal</SelectItem>
-                        <SelectItem value="portraits">Portrete</SelectItem>
+                        <SelectItem value='event'>Eveniment</SelectItem>
+                        <SelectItem value='concert'>Concert/Festival</SelectItem>
+                        <SelectItem value='personal_project'>Proiect Personal</SelectItem>
+                        <SelectItem value='portraits'>Portrete</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -205,12 +213,12 @@ const AddEventDialog = () => {
               )}
             />
             <Controller
-              name="location"
+              name='location'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <div className="flex-center-between">
-                    <FieldLabel htmlFor="form-location">
+                  <div className='flex-center-between'>
+                    <FieldLabel htmlFor='form-location'>
                       Locație
                     </FieldLabel>
                     {fieldState.invalid && (
@@ -219,19 +227,19 @@ const AddEventDialog = () => {
                   </div>
                   <Input
                     {...field}
-                    id="form-location"
+                    id='form-location'
                     aria-invalid={fieldState.invalid}
                   />
                 </Field>
               )}
             />
             <Controller
-              name="locationTranslation"
+              name='locationTranslation'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <div className="flex-center-between">
-                    <FieldLabel htmlFor="form-location-translation">
+                  <div className='flex-center-between'>
+                    <FieldLabel htmlFor='form-location-translation'>
                       Traducere Locație
                     </FieldLabel>
                     {fieldState.invalid && (
@@ -240,18 +248,18 @@ const AddEventDialog = () => {
                   </div>
                   <Input
                     {...field}
-                    id="form-location-translation"
+                    id='form-location-translation'
                     aria-invalid={fieldState.invalid}
                   />
                 </Field>
               )}
             />
             <Controller
-              name="date"
+              name='date'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <div className="flex-center-between">
+                  <div className='flex-center-between'>
                     <FieldLabel>Data</FieldLabel>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </div>
@@ -259,22 +267,22 @@ const AddEventDialog = () => {
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
-                        variant={"outline"}
+                        variant={'outline'}
                         className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !field.value && "text-muted-foreground"
+                          'w-full justify-start text-left font-normal',
+                          !field.value && 'text-muted-foreground'
                         )}
                       >
-                        <IconCalendar className="mr-2 h-4 w-4" />
-                        {field.value ? format(field.value, "PPP", { locale: ro }) : <span>Alege o dată</span>}
+                        <IconCalendar className='mr-2 h-4 w-4' />
+                        {field.value ? format(field.value, 'PPP', { locale: ro }) : <span>Alege o dată</span>}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
+                    <PopoverContent className='w-auto p-0'>
                       <Calendar
-                        mode="single"
+                        mode='single'
                         selected={field.value}
                         onSelect={field.onChange} // Updates the form state
-                        disabled={(date) => date < new Date("1900-01-01")}
+                        disabled={(date) => date < new Date('1900-01-01')}
                         initialFocus
                       />
                     </PopoverContent>
@@ -285,7 +293,7 @@ const AddEventDialog = () => {
           </FieldGroup>
         </form>
         <DialogFooter>
-          <DialogClose className="cursor-pointer text-gray-600 rounded-sm px-4 py-1 border"> 
+          <DialogClose className='cursor-pointer text-gray-600 rounded-sm px-4 py-1 border'> 
             Anuleaza
           </DialogClose>
           <Button
@@ -293,10 +301,10 @@ const AddEventDialog = () => {
             type='submit'
             form='form-new-event'
             // onClick={handleCreateEvent}
-            className="cursor-pointer text-white rounded-sm px-4 py-1 border"
+            className='cursor-pointer text-white rounded-sm px-4 py-1 border'
           >
             {isCreatingEvent ? (
-              <IconLoader2 className="rotate" />
+              <IconLoader2 className='rotate' />
             ) : (
               <span>Creeaza</span>
             )}

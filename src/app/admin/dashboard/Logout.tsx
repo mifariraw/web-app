@@ -1,25 +1,30 @@
-"use client"
+'use client'
 
-import { Button } from '@src/components/ui/button'
-import { cn } from '@src/lib/utils'
+import { Button } from '@components/ui/button'
+import { cn } from '@lib/utils'
+import { logoutAdmin } from '@src/lib/admin'
 import { IconLoader2, IconLogout } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 const Logout = () => {
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const router = useRouter()
 
-  const handleLogout = async () => {
+  async function handleLogout () {
     setIsLoggingOut(true)
 
-    await fetch("/api/logout", {
-      method: "POST",
-    })
-      .finally(() => {
-        setIsLoggingOut(false)
-        router.replace("/")
-      })
+    try {
+      await logoutAdmin()
+      
+      toast.success('Logged out')
+    } catch {
+      toast.success('Eroare')
+    }
+
+    setIsLoggingOut(false)
+    router.replace('/')
   }
 
   return (

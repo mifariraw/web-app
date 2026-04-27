@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useRef, useState } from "react";
-import Image from "next/image";
+import { useRef, useState } from 'react';
+import Image from 'next/image';
 import {
   Dialog,
   DialogClose,
@@ -11,11 +11,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@src/components/ui/dialog"
-import { IconLoader2, IconPhotoPlus, IconPlus } from "@tabler/icons-react";
-import { Button } from "@src/components/ui/button";
-import { cn } from "@src/lib/utils";
-import { uploadEventImages } from "@src/lib/admin";
+} from '@components/ui/dialog'
+import { 
+  IconLoader2, IconPhotoPlus, IconPlus 
+} from '@tabler/icons-react';
+import { Button } from '@components/ui/button';
+import { cn } from '@lib/utils';
+import { uploadEventImages } from '@lib/admin';
+import { toast } from 'sonner';
 
 export default function ImageUploader({
   id,
@@ -38,16 +41,22 @@ export default function ImageUploader({
     setFiles(Array.from(fileList));
   };
 
-  const uploadFiles = () => {
+  async function uploadFiles() {
     setIsUploading(true);
 
-    uploadEventImages(id, files, folder)
-      .finally(() => {
-        setIsUploading(false)
-        setOpen(false)
-      })
-  };
+    try {
+      await uploadEventImages(id, files, folder)
+      
+      toast.success('Imagini incarcate')
+    } catch {
+      toast.error('Eroare in incarcarea imaginiilor')
+    }
 
+    
+    setIsUploading(false)
+    setOpen(false)
+  };
+    
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -57,13 +66,13 @@ export default function ImageUploader({
         <DialogHeader>
           <DialogTitle>Incarca noi fotografii</DialogTitle>
         </DialogHeader>
-        <DialogDescription className={"flex flex-col gap-2"}>
+        <DialogDescription className={'flex flex-col gap-2'}>
         </DialogDescription>
 
         <div
           className={cn(
-            "border-2 border-dashed rounded-xl p-2 py-4 flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition relative group",
-            files.length === 0 && "cursor-pointer",
+            'border-2 border-dashed rounded-xl p-2 py-4 flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition relative group',
+            files.length === 0 && 'cursor-pointer',
           )}
           onClick={() => files.length === 0 && inputRef.current?.click()}
           onDragOver={(e: React.DragEvent<HTMLDivElement>) => e.preventDefault()}
@@ -76,25 +85,25 @@ export default function ImageUploader({
           {files.length ? (
             <ImagesPreview photos={files} />
           ) : (
-            <div className="flex flex-col items-center gap-4">
-              <span className="text-gray-500 opacity-50 text-2xl text-center select-none">
+            <div className='flex flex-col items-center gap-4'>
+              <span className='text-gray-500 opacity-50 text-2xl text-center select-none'>
                 Alege fotografiile
               </span>
-              <IconPhotoPlus size={128} className="opacity-50" />
+              <IconPhotoPlus size={128} className='opacity-50' />
             </div>
           )}
         </div>
         <input
           ref={inputRef}
-          type="file"
+          type='file'
           multiple
-          accept={"image/*"}
-          className="hidden"
+          accept={'image/*'}
+          className='hidden'
           onChange={handleChange}
         />
 
         <DialogFooter>
-          <DialogClose className="cursor-pointer text-gray-600 rounded-sm px-4 py-1 border"> 
+          <DialogClose className='cursor-pointer text-gray-600 rounded-sm px-4 py-1 border'> 
             Anuleaza
           </DialogClose>
           <Button
@@ -102,10 +111,10 @@ export default function ImageUploader({
             type='submit'
             form='form-new-event-image'
             onClick={uploadFiles}
-            className="cursor-pointer text-white rounded-sm px-4 py-1 border"
+            className='cursor-pointer text-white rounded-sm px-4 py-1 border'
           >
             {isUploading ? (
-              <IconLoader2 className="rotate" />
+              <IconLoader2 className='rotate' />
             ) : (
               <span>Incarca fotografiile</span>
             )}
@@ -118,15 +127,15 @@ export default function ImageUploader({
 
 const ImagesPreview = ({ photos }: { photos: File[] }) => {
   return (
-    <div className="relative flex items-start gap-2 overflow-auto">
+    <div className='relative flex items-start gap-2 overflow-auto'>
       {photos.map((file, i) => (
         <Image
           src={URL.createObjectURL(file)}
           key={i}
           width={100}
           height={100}
-          alt=""
-          className="w-1/2 aspect-square object-cover rounded-md"
+          alt=''
+          className='w-1/2 aspect-square object-cover rounded-md'
         />
       ))}
     </div>

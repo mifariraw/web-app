@@ -1,24 +1,21 @@
-"use client"
-import { AppSidebar } from "@src/components/app-sidebar"
-import { SiteHeader } from "@src/components/site-header"
+'use client'
+import { AppSidebar } from '@components/app-sidebar'
+import { SiteHeader } from '@components/site-header'
 import {
   SidebarInset,
   SidebarProvider,
-} from "@src/components/ui/sidebar"
-// import { useAdmin } from "@src/hooks/useAdmin";
+} from '@components/ui/sidebar'
 
 export default function AdminPanel({ children }: { children: React.ReactNode }) {
-  // const { data } = useAdmin(admin);
-
   return (
     <SidebarProvider
       style={
         {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)"
+          '--sidebar-width': 'calc(var(--spacing) * 72)',
+          '--header-height': 'calc(var(--spacing) * 12)'
         } as React.CSSProperties
       }>
-      <AppSidebar variant="inset" />
+      <AppSidebar variant='inset' />
       <SidebarInset>
         <SiteHeader />
         {children}

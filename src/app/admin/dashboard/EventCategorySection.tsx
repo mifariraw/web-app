@@ -1,16 +1,16 @@
-"use client"
+'use client'
 
-import EventCard from "@src/components/EventCard";
-import EventCardSkeleton from "@src/components/skeletons/EventCardSkeleton";
-import { Button } from "@src/components/ui/button";
+import EventCard from '@components/EventCard';
+import EventCardSkeleton from '@components/skeletons/EventCardSkeleton';
+import { Button } from '@components/ui/button';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@src/components/ui/input-group"
-import { useEvents } from "@src/hooks/useEvents";
-import { cn } from "@src/lib/utils";
-import { IconReload, IconSearch, IconXMark } from "@tabler/icons-react";
+} from '@components/ui/input-group'
+import { useEvents } from '@src/hooks/useEvents';
+import { cn } from '@lib/utils';
+import { IconReload, IconSearch, IconXMark } from '@tabler/icons-react';
 
 interface EventCategorySectionProps {
   title: string;
@@ -29,24 +29,24 @@ export const EventCategorySection = ({ title, type }: EventCategorySectionProps)
   const showNoResults = !loading && events.length === 0;
 
   return (
-    <section className="space-y-4">
-      <div className="flex-center-between gap-8">
+    <section className='space-y-4'>
+      <div className='flex-center-between gap-8'>
         <h2 className={cn(
-          "text-xl font-bold whitespace-nowrap",
-          "xl:text-2xl"
+          'text-xl font-bold whitespace-nowrap',
+          'xl:text-2xl'
         )}>{title}</h2>
 
-        <div className="flex-center gap-1">
+        <div className='flex-center gap-1'>
           <InputGroup className={cn(
-            "max-w-40",
-            "sm:max-w-60"
+            'max-w-40',
+            'sm:max-w-60'
           )}>
             <InputGroupInput 
-              placeholder="Cauta..." 
+              placeholder='Cauta...' 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className={cn(
-                "xl:text-xl"
+                'xl:text-xl'
               )}
             />
             <InputGroupAddon>
@@ -54,7 +54,7 @@ export const EventCategorySection = ({ title, type }: EventCategorySectionProps)
             </InputGroupAddon>
           </InputGroup>
           <Button
-            variant="outline"
+            variant='outline'
             onClick={reload}
           >
             <IconReload />
@@ -63,8 +63,8 @@ export const EventCategorySection = ({ title, type }: EventCategorySectionProps)
       </div>
 
       <div className={cn(
-        "flex items-start justify-start gap-4 overflow-x-scroll",
-        loading && "overflow-hidden!"
+        'flex items-start justify-start gap-4 overflow-x-scroll',
+        loading && 'overflow-hidden!'
       )}>
         {loading ? (
           Array(4).fill(0).map((_, i) => (
@@ -75,9 +75,9 @@ export const EventCategorySection = ({ title, type }: EventCategorySectionProps)
             <EventCard key={i} event={event} />
           ))
         ) : showNoResults ? (
-          <div className="flex flex-col w-full items-center justify-center py-10 gap-4">
-            <IconXMark size={86} className="opacity-40" />
-            <span className="text-base text-muted-foreground">Nu exista rezultate</span>
+          <div className='flex flex-col w-full items-center justify-center py-10 gap-4'>
+            <IconXMark size={86} className='opacity-40' />
+            <span className='text-base text-muted-foreground'>Nu exista rezultate</span>
           </div>
         ) : null}
       </div>

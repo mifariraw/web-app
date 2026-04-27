@@ -1,7 +1,6 @@
-import { Button } from '@src/components/ui/button'
+import { Button } from '@components/ui/button'
 import { IconDashboard, IconError404 } from '@tabler/icons-react'
 import Link from 'next/link'
-import React from 'react'
 
 const NotFound = () => {
   return (
@@ -12,8 +11,8 @@ const NotFound = () => {
       </div>
       <p className='text-2xl capitalize'>Pagina nu exista</p>
 
-      <Button variant={"outline"}>
-        <Link href={"/admin/dashboard"} className='flex items-center gap-2'>
+      <Button variant={'outline'}>
+        <Link href={'/admin/dashboard'} className='flex items-center gap-2'>
           <IconDashboard />
           Dashboard
         </Link>

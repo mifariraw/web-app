@@ -1,8 +1,8 @@
-import { connectDB } from "@src/lib/mongodb";
-import { Event } from "@src/models/Event";
-import mongoose from "mongoose";
-import { notFound } from "next/navigation";
-import EventView from "./EventView";
+import { connectDB } from '@lib/mongodb';
+import { Event } from '@src/models/Event';
+import mongoose from 'mongoose';
+import { notFound } from 'next/navigation';
+import EventView from './EventView';
 
 interface PageProps {
   params: Promise<{ id: string }>;

@@ -1,11 +1,10 @@
-import React from 'react'
-import GlitchText from "@components/GlitchText"
+import GlitchText from '@components/GlitchText'
 import Link from 'next/link'
 import { IconHome2 } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 
 const NotFound = () => {
-  const t = useTranslations("NotFound")
+  const t = useTranslations('NotFound')
 
   return (
     <div className='w-full h-screen flex-center flex-col justify-center'>
@@ -21,7 +20,7 @@ const NotFound = () => {
         {t('pageNotExisting')}
       </span>
     
-      <Link href="/" className='flex-center gap-2 text-white mt-16'>
+      <Link href='/' className='flex-center gap-2 text-white mt-16'>
         <IconHome2 />
         {t('homeLink')}
       </Link>

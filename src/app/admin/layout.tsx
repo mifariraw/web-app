@@ -1,11 +1,10 @@
-import type { Metadata } from "next";
-import AdminPanel from "./AdminPanel";
-import { TooltipProvider } from "@src/components/ui/tooltip"
-// import { IconAlertTriangle, IconCircleCheck, IconCircleX, IconInfoCircle } from "@tabler/icons-react";
+import type { Metadata } from 'next';
+import AdminPanel from './AdminPanel';
+import { TooltipProvider } from '@components/ui/tooltip'
 
 export const metadata: Metadata = {
-  title: "Dashboard | MifariRaw",
-  description: "",
+  title: 'Dashboard | MifariRaw',
+  description: '',
 };
 
 export default function AdminLayout({

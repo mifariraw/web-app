@@ -55,5 +55,17 @@
   "NotFound": {
     "pageNotExisting": "This page doesn't exist",
     "homeLink": "Home"
+  },
+  "Common": {
+    "success": {
+      "general": "Success",
+      "login": "Logged In",
+      "contact": "Message sent succesfully"
+    },
+    "errors": {
+      "general": "Error",
+      "login": "Error",
+      "contact": "Error while sending the message"
+    }
   }
 }

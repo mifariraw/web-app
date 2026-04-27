@@ -1,8 +1,7 @@
-"use client"
+'use client'
 
-import React from 'react'
 import { LoginForm } from './LoginForm'
-import { IconHelpHexagon } from "@tabler/icons-react"
+import { IconHelpHexagon } from '@tabler/icons-react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 
@@ -19,7 +18,7 @@ const Login = () => {
           {t('info')}
         </span>
       </span>
-      <Link href="/" className="text-white opacity-70 hover:underline hover:opacity-100 mt-2">
+      <Link href='/' className='text-white opacity-70 hover:underline hover:opacity-100 mt-2'>
         {t('backHome')}
       </Link>
     </div>

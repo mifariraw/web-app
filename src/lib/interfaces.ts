@@ -7,7 +7,7 @@ interface MenuItem {
 export interface StaggeredMenuProps {
   position?: 'left' | 'right';
   colors?: string[];
-  items?: MenuItem[]; // This is the crucial part
+  items?: MenuItem[];
   socialItems?: MenuItem[];
   displaySocials?: boolean;
   displayItemNumbering?: boolean;

@@ -1,9 +1,8 @@
-"use client"
+'use client'
 
-import React from 'react'
-import logo from "@public/images/White.svg";
+import logo from '@public/images/White.svg';
 import StaggeredMenu from './StaggeredMenu';
-import { usePathname } from "next/navigation";
+import { usePathname } from 'next/navigation';
 import { useDisableScroll } from '@src/hooks/useDisableScroll';
 import { useTranslations } from 'next-intl';
 
@@ -29,7 +28,7 @@ const MobileNavbar = () => {
     { label: t('personalProjects'), link: '/events/personal_projects' },
   ];
 
-  if (pathname.startsWith("/admin")) {
+  if (pathname.startsWith('/admin')) {
     return null;
   }
 
@@ -39,20 +38,18 @@ const MobileNavbar = () => {
       className='w-full h-full absolute lg:hidden'
     >
       <StaggeredMenu
-        position="right"
+        position='right'
         items={menuItems}
         socialItems={socialItems}
         displaySocials
         displayItemNumbering={false}
-        menuButtonColor="#ffffff"
-        openMenuButtonColor="#000"
+        menuButtonColor='#ffffff'
+        openMenuButtonColor='#000'
         changeMenuColorOnOpen={true}
         colors={['#B19EEF', '#5227FF']}
         logoUrl={logo}
-        accentColor="#5227FF"
+        accentColor='#5227FF'
         className='lg:hidden z-10'
-        // onMenuOpen={() => console.log('Menu opened')}
-        // onMenuClose={() => console.log('Menu closed')}
       />
     </div>
   )

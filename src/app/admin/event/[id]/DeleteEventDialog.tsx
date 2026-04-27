@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogClose,
@@ -10,11 +10,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@src/components/ui/dialog"
+} from '@components/ui/dialog'
 import { IconLoader2, IconTrash } from '@tabler/icons-react'
-import { Button } from '@src/components/ui/button'
-import { deleteEvent } from '@src/lib/admin'
+import { Button } from '@components/ui/button'
+import { deleteEvent } from '@lib/admin'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 interface DeleteEventDialogProps {
   id: string;
@@ -27,15 +28,20 @@ const DeleteEventDialog = ({ id, folder, title }: DeleteEventDialogProps) => {
   const [open, setOpen] = useState(false)
   const [isDeleteingEvent, setIsDeleteingEvent] = useState(false)
 
-  function handleDelete() {
+  async function handleDelete() {
     setIsDeleteingEvent(true)
 
-    deleteEvent(id, folder)
-      .finally(() => {
-        setIsDeleteingEvent(false)
-        setOpen(false)
-        router.replace("/admin/dashboard")
-      })
+    try {
+      await deleteEvent(id, folder)
+      
+      toast.success('Event sters')
+    } catch {
+      toast.error('Eroare in stergerea eventului')
+    }
+
+    setIsDeleteingEvent(false)
+    setOpen(false)
+    router.replace('/admin/dashboard')
   }
 
   return (
@@ -50,20 +56,20 @@ const DeleteEventDialog = ({ id, folder, title }: DeleteEventDialogProps) => {
         <DialogHeader>
           <DialogTitle>Sterge {title}</DialogTitle>
         </DialogHeader>
-        <DialogDescription className={"flex flex-col gap-2"}>
+        <DialogDescription className={'flex flex-col gap-2'}>
           Atentie! Urmeaza sa stergi acest eveniment
         </DialogDescription>
         <DialogFooter>
-          <DialogClose className="cursor-pointer text-gray-600 rounded-sm px-4 py-1 border"> 
+          <DialogClose className='cursor-pointer text-gray-600 rounded-sm px-4 py-1 border'> 
             Anuleaza
           </DialogClose>
           <Button
             disabled={isDeleteingEvent}
             onClick={handleDelete}
-            className="cursor-pointer text-white bg-destructive rounded-sm px-4 py-1 border"
+            className='cursor-pointer text-white bg-destructive rounded-sm px-4 py-1 border'
           >
             {isDeleteingEvent ? (
-              <IconLoader2 className="rotate" />
+              <IconLoader2 className='rotate' />
             ) : (
               <span>Sterge</span>
             )}

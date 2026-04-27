@@ -1,75 +1,68 @@
-import { formSchema as addEventFormSchema } from "@src/app/admin/dashboard/AddEventDialog";
-import { formSchema as editEventFormSchema } from "@src/app/admin/event/[id]/EditEventDialog";
-import { formSchema as editEventImageFormSchema } from "@src/app/admin/event/[id]/EditImageDialog";
-import { toast } from "sonner";
-import z from "zod";
-
-interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  message?: string;
-}
+import { formSchema as addEventFormSchema } from '@src/app/admin/dashboard/AddEventDialog';
+import { formSchema as editEventFormSchema } from '@src/app/admin/event/[id]/EditEventDialog';
+import { formSchema as editEventImageFormSchema } from '@src/app/admin/event/[id]/EditImageDialog';
+import { toast } from 'sonner';
+import z from 'zod';
 
 // auth
 export async function loginAdmin(email: string, password: string) {
-  const res = await fetch("/api/admin/login", {
-    method: "POST",
+  const res = await fetch('/api/admin/login', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
   })
 
   const data = await res.json();
-  
+
   if (!res.ok) {
-    toast.error(data.message || "Login failed");
+    throw new Error(data.message || "unknown_error");
   }
 
-  toast.success("Logged In");
+  return data;
 }
 
 export async function changePassword(oldPassword: string, newPassword: string) {
-  const res = await fetch("/api/admin/change-password", {
-    method: "POST",
+  const res = await fetch('/api/admin/change-password', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ oldPassword, newPassword }),
   })
 
   const data = await res.json();
-  
+
   if (!res.ok) {
-    toast.error(data.message || "Eroare");
+    throw new Error(data.message || "unknown_error");
   }
 
-  toast.success("Parola a fost schimbată");
+  return data;
 }
 
 export async function logoutAdmin() {
-  const res = await fetch("/api/admin/logout", {
-    method: "POST",
+  const res = await fetch('/api/admin/logout', {
+    method: 'POST',
   })
 
   const data = await res.json();
-  
+
   if (!res.ok) {
-    toast.error(data.message || "Eroare");
+    throw new Error(data.message || "unknown_error");
   }
 
-  toast.success("Logged Out");
+  return data;
 }
  
-
 // event management
 export async function createNewEvent(data: z.infer<typeof addEventFormSchema>) {
   const url = await uploadImage(data.coverImageUrl, data.type)
 
-  const res = await fetch("/api/admin/create-event", {
-    method: "POST",
+  const res = await fetch('/api/admin/create-event', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ 
       data: {
@@ -79,49 +72,49 @@ export async function createNewEvent(data: z.infer<typeof addEventFormSchema>) {
     }),
   })
 
-  const eventData: ApiResponse<unknown> = await res.json();
-  
+  const eventData = await res.json();
+
   if (!res.ok) {
-    toast.error(eventData.message || "Eroare");
+    throw new Error(eventData.message || "unknown_error");
   }
 
-  toast.success("Eventul a fost creat");
+  return eventData;
 }
 
 export async function deleteEvent(id: string, folder: string) {
   const res = await fetch(`/api/admin/event/${id}/delete`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ folder })
   })
 
-  const data: ApiResponse<unknown> = await res.json();
-  
+  const data = await res.json();
+
   if (!res.ok) {
-    toast.error(data.message || "Eroare");
+    throw new Error(data.message || "unknown_error");
   }
 
-  toast.success("Eventul a fost sters");
+  return data;
 }
 
 export async function updateEvent(id: string, data: z.infer<typeof editEventFormSchema>) {
   const res = await fetch(`/api/admin/event/${id}/update`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ data }),
   })
 
-  const eventData: ApiResponse<unknown> = await res.json();
-  
+  const eventData = await res.json();
+
   if (!res.ok) {
-    toast.error(eventData.message || "Eroare");
+    throw new Error(eventData.message || "unknown_error");
   }
 
-  toast.success("Eventul a fost actualizat");
+  return eventData;
 }
 
 export async function updateEventImage(
@@ -132,20 +125,20 @@ export async function updateEventImage(
   const { url } = await uploadImage(data.coverImageUrl, folder)
   
   const res = await fetch(`/api/admin/event/${id}/update-image`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ url, folder }),
   })
 
-  const eventData: ApiResponse<unknown> = await res.json();
-  
+  const eventData = await res.json();
+
   if (!res.ok) {
-    toast.error(eventData.message || "Eroare");
+    throw new Error(eventData.message || "unknown_error");
   }
 
-  toast.success("Eventul a fost actualizat");
+  return eventData;
 }
 
 export async function uploadEventImages(
@@ -156,20 +149,20 @@ export async function uploadEventImages(
   const data = await uploadMultipleImages(files, folder)
   
   const res = await fetch(`/api/admin/event/${id}/upload-images`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ images: data, folder }),
   })
 
-  const eventData: ApiResponse<unknown> = await res.json();
-  
+  const eventData = await res.json();
+
   if (!res.ok) {
-    toast.error(eventData.message || "Eroare");
+    throw new Error(eventData.message || "unknown_error");
   }
 
-  toast.success("Imaginile au fost incarcate");
+  return eventData;
 }
 
 export async function deleteEventImages(
@@ -178,20 +171,20 @@ export async function deleteEventImages(
   folder: string,
 ) {
   const res = await fetch(`/api/admin/event/${id}/delete-images`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ images, folder }),
   })
 
-  const eventData: ApiResponse<unknown> = await res.json();
-  
+  const data = await res.json();
+
   if (!res.ok) {
-    toast.error(eventData.message || "Eroare");
+    throw new Error(data.message || "unknown_error");
   }
 
-  toast.success("Eventul a fost actualizat");
+  return data;
 }
 
 type UploadedImageResponse = {
@@ -203,19 +196,18 @@ type UploadedImageResponse = {
 
 export async function uploadImage(file: File, folder: string): Promise<UploadedImageResponse> {
   const formData = new FormData();
-  formData.append("file", file);
-  formData.append("folder", folder);
+  formData.append('file', file);
+  formData.append('folder', folder);
 
-  const res = await fetch("/api/admin/upload-image", {
-    method: "POST",
+  const res = await fetch('/api/admin/upload-image', {
+    method: 'POST',
     body: formData,
   });
 
   const data = await res.json();
 
   if (!res.ok) {
-    toast.error(data.message || "Eroare la upload");
-    throw new Error(data.message || "Eroare la upload");
+    throw new Error(data.message || 'Eroare la upload');
   }
 
   return data.url;
@@ -225,20 +217,19 @@ export async function uploadMultipleImages(files: File[], folder: string): Promi
   const formData = new FormData();
 
   files.forEach((file) => {
-    formData.append("files", file);
+    formData.append('files', file);
   });
-  formData.append("folder", folder);
+  formData.append('folder', folder);
 
-  const res = await fetch("/api/admin/upload-images", {
-    method: "POST",
+  const res = await fetch('/api/admin/upload-images', {
+    method: 'POST',
     body: formData,
   });
 
   const data = await res.json();
 
   if (!res.ok) {
-    toast.error(data.message || "Eroare la upload");
-    throw new Error(data.message || "Eroare la upload");
+    throw new Error(data.message || 'Eroare la upload');
   }
 
   return data;

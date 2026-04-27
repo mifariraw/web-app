@@ -1,14 +1,14 @@
-import {NextResponse} from "next/server";
-import {jwtVerify} from "jose";
+import {NextResponse} from 'next/server';
+import {jwtVerify} from 'jose';
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function GET(req: Request) {
-  const cookie = req.headers.get("cookie") || "";
+  const cookie = req.headers.get('cookie') || '';
   const token = cookie
-    .split("; ")
-    .find(c => c.startsWith("admin_token="))
-    ?.split("=")[1];
+    .split('; ')
+    .find(c => c.startsWith('admin_token='))
+    ?.split('=')[1];
 
   if (!token) {
     return NextResponse.json({authenticated: false});

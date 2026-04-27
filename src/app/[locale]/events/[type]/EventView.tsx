@@ -1,32 +1,37 @@
-"use client"
+'use client'
 
 import { useEvents } from '@src/hooks/useEvents'
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/effect-coverflow";
-
-import { Controller, EffectCoverflow } from "swiper/modules";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import { Controller, EffectCoverflow } from 'swiper/modules';
 import EventCard from './EventCard';
-import { IconAppsOff, IconCalendarWeekFilled, IconChevronLeft, IconChevronRight, IconLibraryPhoto, IconMapPinFilled, IconPointFilled, IconThumbUp, IconThumbUpFilled } from '@tabler/icons-react';
-import { cn } from '@src/lib/utils';
+import { 
+  IconAppsOff, IconCalendarWeekFilled, 
+  IconChevronLeft, IconChevronRight, 
+  IconLibraryPhoto, IconMapPinFilled, 
+  IconPointFilled, IconThumbUp, 
+  IconThumbUpFilled 
+} from '@tabler/icons-react';
+import { cn } from '@lib/utils';
 import { useEffect, useState } from 'react';
 import { Swiper as SwiperType } from 'swiper/types';
 import Gallery from '@src/app/admin/event/[id]/EventGallery';
 import { format } from 'date-fns';
-import EventUserSkeleton from '@src/components/skeletons/EventUserSkeleton';
-import { useLocale, useTranslations } from "next-intl";
-import { Button } from '@src/components/ui/button';
+import EventUserSkeleton from '@components/skeletons/EventUserSkeleton';
+import { useLocale, useTranslations } from 'next-intl';
+import { Button } from '@components/ui/button';
 import Link from 'next/link';
-import { likeEvent, unlikeEvent } from '@src/lib/user';
+import { likeEvent, unlikeEvent } from '@lib/user';
 
 const EventView = ({ type }: { type: string }) => {
-  const { events, loading } = useEvents(type, "/api/events")
+  const { events, loading } = useEvents(type, '/api/events')
   const t = useTranslations('EventsPage')
   const locale = useLocale()
   const [likedEvents, setLikedEvents] = useState<string[]>(() => {
-    if (typeof window === "undefined") return []
+    if (typeof window === 'undefined') return []
 
-    const stored = localStorage.getItem("liked_events");
+    const stored = localStorage.getItem('liked_events');
     if (!stored) return [];
     try {
       return JSON.parse(stored);
@@ -52,23 +57,23 @@ const EventView = ({ type }: { type: string }) => {
   };
 
   useEffect(() => {
-    localStorage.setItem("liked_events", JSON.stringify(likedEvents));
+    localStorage.setItem('liked_events', JSON.stringify(likedEvents));
   }, [likedEvents]);
 
   if (!loading && !events.length) {
     return (
       <div className='pt-24 z-10 text-white'>
-        <div className="flex flex-col gap-2 items-center justify-center py-8">
-          <IconAppsOff size={128} className="opacity-70 text-white" />
-          <span className="z-10 text-2xl mt-24 text-center">
+        <div className='flex flex-col gap-2 items-center justify-center py-8'>
+          <IconAppsOff size={128} className='opacity-70 text-white' />
+          <span className='z-10 text-2xl mt-24 text-center'>
             {t('noEvents')}
           </span>
 
           <Button
-            variant={"outline"}
+            variant={'outline'}
             className='bg-transparent hover:bg-transparent px-8 py-6 border-white mt-24'
           >
-            <Link href={"/"} className='text-white text-xl'>Home</Link>
+            <Link href={'/'} className='text-white text-xl'>Home</Link>
           </Button>
         </div>
       </div>
@@ -89,10 +94,10 @@ const EventView = ({ type }: { type: string }) => {
         {t(`${type}`)}
       </h3>
 
-      <div className="w-full hidden lg:block">
+      <div className='w-full hidden lg:block'>
         <Swiper
           onSwiper={setEventsSwiper}
-          effect="coverflow"
+          effect='coverflow'
           centeredSlides
           slidesPerView={2.5}
           modules={[EffectCoverflow, Controller]}
@@ -105,15 +110,15 @@ const EventView = ({ type }: { type: string }) => {
           }}
           onSlideChange={(e) => setActiveIndex(e.activeIndex)}
           controller={{ control: dotsSwiper }}
-          className={"w-full fade-edges"}
+          className={'w-full fade-edges'}
         >
           {events.map((e, i) => (
             <SwiperSlide
               key={i}
               className={cn(
-                "no-swiper-blur w-full flex items-center justify-center px-3",
-                "xl:px-5",
-                "2xl:px-8"
+                'no-swiper-blur w-full flex items-center justify-center px-3',
+                'xl:px-5',
+                '2xl:px-8'
               )}
             >
               <EventCard event={e} isActive={activeIndex === i} />
@@ -122,12 +127,12 @@ const EventView = ({ type }: { type: string }) => {
         </Swiper>
       </div>
 
-      <div className="w-full lg:hidden">
+      <div className='w-full lg:hidden'>
         <Swiper
           onSwiper={setMobileEventsSwiper}
-          effect="coverflow"
+          effect='coverflow'
           centeredSlides
-          slidesPerView={"auto"}
+          slidesPerView={'auto'}
           modules={[EffectCoverflow, Controller]}
           coverflowEffect={{
             rotate: 30,
@@ -139,14 +144,14 @@ const EventView = ({ type }: { type: string }) => {
           onSlideChange={(e) => setActiveIndex(e.activeIndex)}
           controller={{ control: dotsSwiper }}
           className={cn(
-            "w-full",
-            "sm:w-4/5",
+            'w-full',
+            'sm:w-4/5',
           )}
         >
           {events.map((e, i) => (
             <SwiperSlide
               key={i}
-              className="w-full flex items-center justify-center px-3"
+              className='w-full flex items-center justify-center px-3'
             >
               <EventCard event={e} />
             </SwiperSlide>
@@ -164,16 +169,16 @@ const EventView = ({ type }: { type: string }) => {
           slidesPerView={3}
           centeredSlides
           allowTouchMove={false}
-          className="w-20 mx-0! bg-black/30 backdrop-blur-md rounded-full"
+          className='w-20 mx-0! bg-black/30 backdrop-blur-md rounded-full'
         >
           {events.map((_, i) => (
             <SwiperSlide
               key={i}
-              className="w-full flex items-center justify-center"
+              className='w-full flex items-center justify-center'
             >
               <IconPointFilled key={i} className={cn(
-                "text-white z-10 opacity-40 transition-all duration-200 ease-in",
-                activeIndex === i && "opacity-100"
+                'text-white z-10 opacity-40 transition-all duration-200 ease-in',
+                activeIndex === i && 'opacity-100'
               )} />
             </SwiperSlide>
           ))}
@@ -182,7 +187,7 @@ const EventView = ({ type }: { type: string }) => {
           size={30} 
           className={cn(
             'text-white z-10 opacity-80', 
-            activeIndex === 0 && "opacity-30 pointer-events-none"
+            activeIndex === 0 && 'opacity-30 pointer-events-none'
           )}
           onClick={() => {
             mobileEventsSwiper?.slidePrev()
@@ -193,7 +198,7 @@ const EventView = ({ type }: { type: string }) => {
           size={30} 
           className={cn(
             'text-white z-10 opacity-80', 
-            activeIndex === events.length - 1 && "opacity-30 pointer-events-none"
+            activeIndex === events.length - 1 && 'opacity-30 pointer-events-none'
           )}
           onClick={() => {
             mobileEventsSwiper?.slideNext()
@@ -205,11 +210,11 @@ const EventView = ({ type }: { type: string }) => {
       <div className='flex flex-col items-center justify-center z-10 text-lg text-white mt-4'>
         <div className={cn(
           'flex-center gap-2 z-10',
-          "lg:text-2xl"
+          'lg:text-2xl'
         )}>
           <IconMapPinFilled size={24} className='opacity-60' />
           <span>
-            {locale === "ro" 
+            {locale === 'ro' 
               ? events[activeIndex].location
               : events[activeIndex].locationTranslation
             }
@@ -218,13 +223,13 @@ const EventView = ({ type }: { type: string }) => {
 
         <div className={cn(
           'flex-center gap-2 z-10',
-          "lg:text-2xl"
+          'lg:text-2xl'
         )}>
           <IconCalendarWeekFilled size={24} className='opacity-60' />
           <span>
             {format(
               events[activeIndex].date, 
-              locale === "ro" ? 'dd-MM-yyyy' : "MM-dd-yyyy"
+              locale === 'ro' ? 'dd-MM-yyyy' : 'MM-dd-yyyy'
             )}
           </span>
         </div>
@@ -232,10 +237,10 @@ const EventView = ({ type }: { type: string }) => {
       
       <div className={cn(
         'flex flex-col text-white mt-16 mb-8 z-10',
-        "lg:px-8"
+        'lg:px-8'
       )}>
-        <div className="flex-center-between z-10">
-          <h2 className="flex-center gap-2 whitespace-nowrap">
+        <div className='flex-center-between z-10'>
+          <h2 className='flex-center gap-2 whitespace-nowrap'>
             <IconLibraryPhoto size={28} />
             <span className='text-2xl uppercase font-bold'>
               {t('gallery')}

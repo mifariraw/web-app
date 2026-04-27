@@ -1,11 +1,11 @@
-import { EventPhoto } from "@src/app/admin/event/[id]/EventGallery";
-import { Document } from "mongoose";
+import { EventPhoto } from '@src/app/admin/event/[id]/EventGallery';
+import { Document } from 'mongoose';
 
 enum EventType {
-  Concert = "concert",
-  Event = "event",
-  PersonalProject = "personal_project",
-  Portraits = "portraits"
+  Concert = 'concert',
+  Event = 'event',
+  PersonalProject = 'personal_project',
+  Portraits = 'portraits'
 }
 
 export interface IAdmin extends Document {

@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import { connectDB } from "@src/lib/mongodb";
-import { Admin } from "@src/models/Admin";
-import { SignJWT } from "jose";
+import { NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
+import { connectDB } from '@lib/mongodb';
+import { Admin } from '@src/models/Admin';
+import { SignJWT } from 'jose';
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
     if (!email || !password) {
       return NextResponse.json(
-        { message: "Missing email or password" },
+        { message: 'Missing email or password' },
         { status: 400 }
       );
     }
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     
     if (!admin) {
       return NextResponse.json(
-        { message: "Invalid email or password" },
+        { message: 'Invalid email or password' },
         { status: 401 }
       );
     }
@@ -32,33 +32,33 @@ export async function POST(req: Request) {
 
     if (!isMatch) {
       return NextResponse.json(
-        { message: "Invalid email or password" },
+        { message: 'Invalid email or password' },
         { status: 401 }
       );
     }
 
     const token = await new SignJWT({ userId: admin._id.toString() })
-      .setProtectedHeader({ alg: "HS256" })
+      .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
-      .setExpirationTime("14d")
+      .setExpirationTime('14d')
       .sign(secret);
 
-    const res = NextResponse.json({ message: "Success" }, { status: 200 });
+    const res = NextResponse.json({ message: 'Success' }, { status: 200 });
 
-    res.cookies.set("admin_token", token, {
+    res.cookies.set('admin_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 14,
-      path: "/",
+      path: '/',
     });
 
     return res;
     
   } catch (error: unknown) {
-    console.error("Route Error:", error);
+    console.error('Route Error:', error);
     const res = NextResponse.json(
-      { message: "Internal Server Error", error: (error as Error).message },
+      { message: 'Internal Server Error', error: (error as Error).message },
       { status: 500 }
     );
     

@@ -12,5 +12,5 @@ export const pathnames = {
     en: '/events/[type]',
     ro: '/evenimente/[type]',
   },
-  '/login': "/login"
+  '/login': '/login'
 }

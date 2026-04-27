@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@src/components/ui/button";
+import { Button } from '@components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -10,15 +10,25 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@src/components/ui/dialog"
-import { cn, downloadImagesAsZip, ImageForZip } from "@src/lib/utils";
-import { IconDownload, IconLoader2, IconPhotoCancel, IconSquare, IconSquareCheck, IconTrash } from "@tabler/icons-react";
-import justifiedLayout from "justified-layout";
-import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
-import "yet-another-react-lightbox/styles.css";
-import Lightbox from "yet-another-react-lightbox";
-import { deleteEventImages } from "@src/lib/admin";
+} from '@components/ui/dialog'
+import { 
+  cn, downloadImagesAsZip, ImageForZip 
+} from '@lib/utils';
+import { 
+  IconDownload, IconLoader2, 
+  IconPhotoCancel, IconSquare, 
+  IconSquareCheck, IconTrash 
+} from '@tabler/icons-react';
+import justifiedLayout from 'justified-layout';
+import Image from 'next/image';
+import { 
+  useEffect, useMemo, 
+  useRef, useState 
+} from 'react';
+import 'yet-another-react-lightbox/styles.css';
+import Lightbox from 'yet-another-react-lightbox';
+import { deleteEventImages } from '@lib/admin';
+import { toast } from 'sonner';
 
 export type EventPhoto = {
   url: string;
@@ -64,17 +74,22 @@ export default function Gallery({
     );
   }, [photos, width]);
 
-  const handleDelete = () => {
+  async function handleDelete() {
     setIsDeleteing(true)
 
-    const images = photos.filter(ph => selected.has(ph.publicId))
-    const urls = images.map(i => i.publicId)
+    try {
+      const images = photos.filter(ph => selected.has(ph.publicId))
+      const urls = images.map(i => i.publicId)
+      
+      await deleteEventImages(id, urls, folder)
 
-    deleteEventImages(id, urls, folder)
-      .finally(() => {
-        setIsDeleteing(false)
-        setDialogOpen(false)
-      })
+      toast.success('Imagini sterse')
+    } catch {
+      toast.error('Eroare in stergerea imaginiilor')
+    }
+
+    setIsDeleteing(false)
+    setDialogOpen(false)
   }
 
   const toggle = (id: string) => {
@@ -93,11 +108,11 @@ export default function Gallery({
     for (const photo of photos) {
       setSelected((prev) => {
         const next = new Set(prev);
-        if (action === "toggle") {
+        if (action === 'toggle') {
           if (!next.has(photo.publicId)) {
             next.add(photo.publicId)
           } 
-        } else if (action === "untoggle") {
+        } else if (action === 'untoggle') {
           if (next.has(photo.publicId)) {
             next.delete(photo.publicId)
           } 
@@ -128,33 +143,33 @@ export default function Gallery({
     };
 
     updateWidth();
-    window.addEventListener("resize", updateWidth);
+    window.addEventListener('resize', updateWidth);
 
-    return () => window.removeEventListener("resize", updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
   if (!photos.length) {
     return (
-      <div className="flex flex-col gap-2 items-center justify-center py-8">
-        <IconPhotoCancel size={86} className="opacity-40" />
-        <span className="z-10">{noPhotosText}</span>
+      <div className='flex flex-col gap-2 items-center justify-center py-8'>
+        <IconPhotoCancel size={86} className='opacity-40' />
+        <span className='z-10'>{noPhotosText}</span>
       </div>
     )
   }
 
   return (
     <>
-      <div className="flex-center-between my-2">
+      <div className='flex-center-between my-2'>
         {!isDisabled && (
           selected.size === photos.length ? (
             <IconSquareCheck 
               size={20}
-              onClick={() => toggleAll("untoggle")}
+              onClick={() => toggleAll('untoggle')}
             />
           ) : (
             <IconSquare 
               size={20}
-              onClick={() => toggleAll("toggle")}
+              onClick={() => toggleAll('toggle')}
             />
           )
         )}
@@ -170,7 +185,7 @@ export default function Gallery({
           }))}
         />
 
-        <div className="flex-center gap-4">
+        <div className='flex-center gap-4'>
           <Dialog 
             open={dialogOpen} 
             onOpenChange={setDialogOpen}
@@ -178,28 +193,28 @@ export default function Gallery({
             <DialogTrigger 
               asChild 
               disabled={selected.size === 0}
-              className={cn(selected.size === 0 && "pointer-events-none opacity-40", isDisabled && "hidden")}
+              className={cn(selected.size === 0 && 'pointer-events-none opacity-40', isDisabled && 'hidden')}
             >
-              <IconTrash size={20} className="text-destructive" />
+              <IconTrash size={20} className='text-destructive' />
             </DialogTrigger>
             <DialogContent className='max-h-120 overflow-y-scroll'>
               <DialogHeader>
                 <DialogTitle>Sterge fotografii</DialogTitle>
               </DialogHeader>
-              <DialogDescription className={"flex flex-col gap-2"}>
+              <DialogDescription className={'flex flex-col gap-2'}>
                 Urmeaza sa stergi aceste fotografii. Actiunea este permanenta
               </DialogDescription>
               <DialogFooter>
-                <DialogClose className="cursor-pointer text-gray-600 rounded-sm px-4 py-1 border"> 
+                <DialogClose className='cursor-pointer text-gray-600 rounded-sm px-4 py-1 border'> 
                   Anuleaza
                 </DialogClose>
                 <Button
                   disabled={isDeleteing}
                   onClick={handleDelete}
-                  className="cursor-pointer text-white bg-destructive rounded-sm px-4 py-1 border"
+                  className='cursor-pointer text-white bg-destructive rounded-sm px-4 py-1 border'
                 >
                   {isDeleteing ? (
-                    <IconLoader2 className="rotate" />
+                    <IconLoader2 className='rotate' />
                   ) : (
                     <span>Sterge</span>
                   )}
@@ -211,7 +226,7 @@ export default function Gallery({
           {!isDisabled && (
             <IconDownload 
               size={20} 
-              className={cn(selected.size === 0 && "pointer-events-none opacity-40")}
+              className={cn(selected.size === 0 && 'pointer-events-none opacity-40')}
               onClick={manageDownload}
             />
           )}
@@ -220,10 +235,10 @@ export default function Gallery({
       <div
         ref={containerRef}
         className={cn(
-          "relative h-100 overflow-y-scroll mt-2",
-          "sm:h-150",
-          "xl:h-200",
-          "2xl:h-250"
+          'relative h-100 overflow-y-scroll mt-2',
+          'sm:h-150',
+          'xl:h-200',
+          '2xl:h-250'
         )}
       >
         {layout?.boxes.map((box, i) => {
@@ -234,21 +249,21 @@ export default function Gallery({
             <div
               key={photo.publicId}
               style={{
-                position: "absolute",
+                position: 'absolute',
                 top: box.top,
                 left: box.left,
                 width: box.width,
                 height: box.height,
               }}
               onClick={() => toggle(photo.publicId)}
-              className="cursor-pointer group"
+              className='cursor-pointer group'
             >
               <Image
                 src={photo.url}
-                alt=""
+                alt=''
                 fill
                 className={`object-cover rounded-md transition-transform duration-200 ease-in-out ${
-                  isSelected ? "opacity-70 scale-95" : ""
+                  isSelected ? 'opacity-70 scale-95' : ''
                 }`}
                 onClick={(e) => {
                   e.preventDefault()
@@ -257,11 +272,11 @@ export default function Gallery({
               />
 
               {!isDisabled && (
-                <div className="absolute top-1 let-1 ml-2 opacity-100 group-hover:opacity-100">
+                <div className='absolute top-1 let-1 ml-2 opacity-100 group-hover:opacity-100'>
                   {isSelected ? (
-                    <IconSquareCheck className="bg-black text-white" />
+                    <IconSquareCheck className='bg-black text-white' />
                   ) : (
-                    <IconSquare className="text-white bg-black" />
+                    <IconSquare className='text-white bg-black' />
                   )}
                 </div>
               )}

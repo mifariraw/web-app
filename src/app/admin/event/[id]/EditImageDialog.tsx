@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import React, { useState } from 'react'
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 import {
   Dialog,
   DialogClose,
@@ -13,11 +13,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@src/components/ui/dialog"
-import { Button } from "@src/components/ui/button"
+} from '@components/ui/dialog'
+import { Button } from '@components/ui/button'
 import { IconLoader2, IconUpload } from '@tabler/icons-react'
-import ImageDropzone from '@src/components/ImageDropzone'
-import { updateEventImage } from '@src/lib/admin'
+import ImageDropzone from '@components/ImageDropzone'
+import { updateEventImage } from '@lib/admin'
+import { toast } from 'sonner'
 
 export const formSchema = z.object({
   coverImageUrl: z.instanceof(File),
@@ -37,23 +38,28 @@ const AddEventDialog = ({ id, folder }: { id: string, folder: string }) => {
   const handleImageSelect = (file: File | null) => {
     if (file) {
       
-      form.setValue("coverImageUrl", file, { 
+      form.setValue('coverImageUrl', file, { 
         shouldDirty: true, 
         shouldValidate: true 
       });
     } else {
-      form.setValue("coverImageUrl", undefined as unknown as File);
+      form.setValue('coverImageUrl', undefined as unknown as File);
     }
   };
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsUpdatingImage(true)
 
-    updateEventImage(id, folder, data)
-      .finally(() => {
-        setIsUpdatingImage(false)
-        setOpen(false)
-      })
+    try {
+      updateEventImage(id, folder, data)
+      
+      toast.success('Eventul actualizat')
+    } catch {
+      toast.error('Eroare in actualizarea eventului')
+    }
+
+    setIsUpdatingImage(false)
+    setOpen(false)
   }
   
   return (
@@ -65,23 +71,23 @@ const AddEventDialog = ({ id, folder }: { id: string, folder: string }) => {
         <DialogHeader>
           <DialogTitle>Adauga un noua imagine de coperta</DialogTitle>
         </DialogHeader>
-        <DialogDescription className={"flex flex-col gap-2"}>
+        <DialogDescription className={'flex flex-col gap-2'}>
           <ImageDropzone 
-            selectText="Alege imaginea de coperta"
+            selectText='Alege imaginea de coperta'
             onFileSelect={handleImageSelect}
             hasError={!!form.formState.errors.coverImageUrl}
           />
 
           {form.formState.errors.coverImageUrl && (
-            <p className="text-sm font-medium text-destructive">
+            <p className='text-sm font-medium text-destructive'>
               {form.formState.errors.coverImageUrl.message}
             </p>
           )}
         </DialogDescription>
 
-        <form id="form-new-event-image" onSubmit={form.handleSubmit(onSubmit)} />
+        <form id='form-new-event-image' onSubmit={form.handleSubmit(onSubmit)} />
         <DialogFooter>
-          <DialogClose className="cursor-pointer text-gray-600 rounded-sm px-4 py-1 border"> 
+          <DialogClose className='cursor-pointer text-gray-600 rounded-sm px-4 py-1 border'> 
             Anuleaza
           </DialogClose>
           <Button
@@ -89,10 +95,10 @@ const AddEventDialog = ({ id, folder }: { id: string, folder: string }) => {
             type='submit'
             form='form-new-event-image'
             // onClick={handleCreateEvent}
-            className="cursor-pointer text-white rounded-sm px-4 py-1 border"
+            className='cursor-pointer text-white rounded-sm px-4 py-1 border'
           >
             {isUpdatingImage ? (
-              <IconLoader2 className="rotate" />
+              <IconLoader2 className='rotate' />
             ) : (
               <span>Schimba fotografia</span>
             )}

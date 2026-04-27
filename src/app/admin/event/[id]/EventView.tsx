@@ -42,8 +42,6 @@ const EventView = ({ id }: { id: string }) => {
   }
   
   return (
-    <>
-    <EventSkeleton />
     <div className='p-4 h-full overflow-y-auto relative'>
       <Button
         variant='outline'
@@ -182,7 +180,6 @@ const EventView = ({ id }: { id: string }) => {
         />
       </section>
     </div>
-    </>
   );
 };
 

@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:server": "NODE_OPTIONS='--trace-warnings --no-warnings' node server.js",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

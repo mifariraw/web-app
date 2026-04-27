@@ -60,6 +60,7 @@ const EditEventDialog = ({ event }: { event: IEvent }) => {
     },
   })
 
+  
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsUpdatingEvent(true)
 

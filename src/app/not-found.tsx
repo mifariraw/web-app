@@ -2,6 +2,7 @@ import GlitchText from '@components/GlitchText'
 import Link from 'next/link'
 import { IconHome2 } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
+import { cn } from '@src/lib/utils'
 
 const NotFound = () => {
   const t = useTranslations('NotFound')
@@ -12,11 +13,15 @@ const NotFound = () => {
         speed={1.2}
         enableShadows
         enableOnHover={false}
-        className='custom-class'
+        className={cn(
+          'custom-class scale-200 mb-8',
+          'sm:scale-200',
+          'md:scale-150'
+        )}
       >
         404
       </GlitchText>
-      <span className='nohemi text-white text-3xl'>
+      <span className='nohemi text-white text-3xl text-center'>
         {t('pageNotExisting')}
       </span>
     

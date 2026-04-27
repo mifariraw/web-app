@@ -126,6 +126,7 @@ export default function Home() {
                   title={t(card.title)}
                   subtitle={card.subtitle}
                   bgImage={card.bgImage}
+                  isPersonalProject={card.title === "projectsCard"}
                 />
               </SwiperSlide>
             ))}

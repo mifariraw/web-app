@@ -39,6 +39,7 @@ const MobileNavbar = () => {
     >
       <StaggeredMenu
         position='right'
+        isFixed
         items={menuItems}
         socialItems={socialItems}
         displaySocials

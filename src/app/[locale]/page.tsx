@@ -2,7 +2,7 @@
 
 import HomeCard from '@components/HomeCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import aboutImage from '@public/images/home/about-img.png'
+import eventsImage from '@public/images/home/events-img.jpg'
 import concertsImage from '@public/images/home/concerts-img.jpg'
 import portraitsImage from '@public/images/home/portraits-img.jpg'
 import personalProjectsImage from '@public/images/White@2x.png'
@@ -21,7 +21,7 @@ const cardsContent = [
   {
     title: 'eventsCard',
     subtitle: '',
-    bgImage: aboutImage,
+    bgImage: eventsImage,
     url: 'event'
   },
   {

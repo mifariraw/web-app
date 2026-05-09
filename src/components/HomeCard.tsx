@@ -31,7 +31,7 @@ const HomeCard = ({
       <div className='z-10 h-full relative w-full flex flex-col justify-between px-6 py-4'>
         <span className={cn(
           'nohemi text-xl text-white whitespace-nowrap',
-          title === 'Evenimente' && 'text-black',
+          ['Evenimente', 'Events].includes(title) && 'text-black',
           'lg:text-lg',
           'xl:text-2xl',
           '2xl:text-3xl'

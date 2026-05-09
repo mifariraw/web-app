@@ -20,6 +20,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'MifariRaw',
   description: '',
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export const viewport = 'width=device-width, initial-scale=1';

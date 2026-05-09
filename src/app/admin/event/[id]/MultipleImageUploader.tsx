@@ -52,7 +52,6 @@ export default function ImageUploader({
       toast.error('Eroare in incarcarea imaginiilor')
     }
 
-    
     setIsUploading(false)
     setOpen(false)
   };

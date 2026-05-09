@@ -16,12 +16,20 @@ const AboutPage = () => {
     )}>
       <div className='mt-8'>
         <span className='nohemi text-[#5227FF]/70 bg-white px-1 py-0.5 font-extralight text-xl'>{t('photograph')}</span>
-        <h1 className={'nohemi text-white text-7xl mb-48'}>Mihai</h1>
+        <h1 className={cn(
+          'nohemi text-white text-4xl mb-48',
+          'sm:text-5xl',
+          'lg:text-4xl lg:mb-16',
+          'xl:text-6xl xl:mb-48',
+          '2xl:text-7xl'
+        )}>
+          Rapa Mihai Florin (Mifari)
+        </h1>
         <p className={cn(
           'text-white text-sm',
           'sm:text-base sm:max-w-9/10',
           'md:text-lg',
-          'lg:max-w-3/5',
+          'lg:max-w-3/5 lg:text-xs',
           'xl:text-xl',
           '2xl:text-2xl'
         )}>{t('p1')}</p>
@@ -31,7 +39,7 @@ const AboutPage = () => {
         'text-white/80 mt-10 mb-28 text-sm text-right',
         'sm:text-base sm:max-w-9/10 sm:ml-auto',
         'md:text-lg',
-        'lg:max-w-3/5 lg:mt-16',
+        'lg:max-w-3/5 lg:mt-16 lg:text-xs',
         'xl:text-xl',
         '2xl:text-2xl 2xl:mt-30 2xl:mb-30'
       )}>{t('p2')}</p>

@@ -2,6 +2,22 @@ import { formSchema as addEventFormSchema } from '@src/app/admin/dashboard/AddEv
 import { formSchema as editEventFormSchema } from '@src/app/admin/event/[id]/EditEventDialog';
 import { formSchema as editEventImageFormSchema } from '@src/app/admin/event/[id]/EditImageDialog';
 import z from 'zod';
+import imageCompression from 'browser-image-compression';
+
+type UploadedImageResponse = {
+  url: string;
+  publicId: string;
+  width: number;
+  height: number;
+};
+
+type CloudinaryDirectResponse = {
+  secure_url: string;
+  public_id: string;
+  width: number;
+  height: number;
+  error?: { message: string };
+};
 
 // auth
 export async function loginAdmin(email: string, password: string) {
@@ -193,21 +209,6 @@ export async function deleteEventImages(
   return data;
 }
 
-type UploadedImageResponse = {
-  url: string;
-  publicId: string;
-  width: number;
-  height: number;
-};
-
-type CloudinaryDirectResponse = {
-  secure_url: string;
-  public_id: string;
-  width: number;
-  height: number;
-  error?: { message: string };
-};
-
 export async function uploadImage(file: File, folder: string): Promise<UploadedImageResponse> {
   const formData = new FormData();
   formData.append('file', file);
@@ -232,16 +233,13 @@ export async function uploadMultipleImagesDirectly(
   folder: string
 ): Promise<UploadedImageResponse[]> {
   
-  // 1. Get the signature from your Next.js API
   const signRes = await fetch('/api/admin/sign-cloudinary', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ folder }),
   });
 
-  if (!signRes.ok) {
-    throw new Error('Eroare la obtinerea semnaturii');
-  }
+  if (!signRes.ok) throw new Error('Eroare la obtinerea semnaturii');
 
   const signData = await signRes.json() as {
     signature: string;
@@ -251,10 +249,24 @@ export async function uploadMultipleImagesDirectly(
     apiKey: string;
   };
 
-  // 2. Upload directly to Cloudinary from the browser
-  const uploadPromises = files.map(async (file) => {
+  const compressionOptions = {
+    maxSizeMB: 2,
+    maxWidthOrHeight: 2500,
+    useWebWorker: true,
+  };
+
+  const uploadPromises = files.map(async (originalFile) => {
+    let fileToUpload: File | Blob = originalFile;
+
+    try {
+      fileToUpload = await imageCompression(originalFile, compressionOptions);
+      console.log(`Compressed ${originalFile.name} from ${originalFile.size / 1024 / 1024}MB to ${fileToUpload.size / 1024 / 1024}MB`);
+    } catch (error: unknown) {
+      console.error('Compression failed for', originalFile.name, error);
+    }
+
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', fileToUpload);
     formData.append('api_key', signData.apiKey);
     formData.append('timestamp', signData.timestamp.toString());
     formData.append('signature', signData.signature);
@@ -262,10 +274,7 @@ export async function uploadMultipleImagesDirectly(
 
     const cloudinaryRes = await fetch(
       `https://api.cloudinary.com/v1_1/${signData.cloudName}/image/upload`,
-      {
-        method: 'POST',
-        body: formData,
-      }
+      { method: 'POST', body: formData }
     );
 
     const cloudinaryData = await cloudinaryRes.json() as CloudinaryDirectResponse;

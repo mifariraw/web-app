@@ -60,6 +60,10 @@ const EventView = ({ type }: { type: string }) => {
     localStorage.setItem('liked_events', JSON.stringify(likedEvents));
   }, [likedEvents]);
 
+  useEffect(() => {
+    console.log('activeIndex changed:', activeIndex);
+  }, [activeIndex])
+
   if (!loading && !events.length) {
     return (
       <div className='pt-24 z-10 text-white'>
@@ -167,7 +171,6 @@ const EventView = ({ type }: { type: string }) => {
           modules={[Controller]}
           controller={{ control: dotsSwiper }}
           slidesPerView={3}
-          centeredSlides
           allowTouchMove={false}
           className='w-20 mx-0! bg-black/30 backdrop-blur-md rounded-full'
         >

@@ -72,7 +72,7 @@ export async function logoutAdmin() {
  
 // event management
 export async function createNewEvent(data: z.infer<typeof addEventFormSchema>) {
-  const url = await uploadImage(data.coverImageUrl, data.type)
+  const { url } = await uploadImage(data.coverImageUrl, data.type)
 
   const res = await fetch('/api/admin/create-event', {
     method: 'POST',
@@ -209,23 +209,65 @@ export async function deleteEventImages(
   return data;
 }
 
-export async function uploadImage(file: File, folder: string): Promise<UploadedImageResponse> {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('folder', folder);
-
-  const res = await fetch('/api/admin/upload-image', {
+export async function uploadImage(
+  file: File, 
+  folder: string
+): Promise<UploadedImageResponse> {
+  const signRes = await fetch('/api/admin/sign-cloudinary', {
     method: 'POST',
-    body: formData,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ folder }),
   });
 
-  const data = await res.json();
+  if (!signRes.ok) throw new Error('Eroare la obtinerea semnaturii');
 
-  if (!res.ok) {
-    throw new Error(data.message || 'Eroare la upload');
+  const signData = await signRes.json() as {
+    signature: string;
+    timestamp: number;
+    folder: string;
+    cloudName: string;
+    apiKey: string;
+  };
+
+  const compressionOptions = {
+    maxSizeMB: 2,
+    maxWidthOrHeight: 2500,
+    useWebWorker: true,
+  };
+
+  let fileToUpload: File | Blob = file;
+
+  try {
+    fileToUpload = await imageCompression(file, compressionOptions);
+    console.log(`Compressed ${file.name} from ${file.size / 1024 / 1024}MB to ${fileToUpload.size / 1024 / 1024}MB`);
+  } catch (error: unknown) {
+    console.error('Compression failed for', file.name, error);
   }
 
-  return data.url;
+  const formData = new FormData();
+  formData.append('file', fileToUpload);
+  formData.append('api_key', signData.apiKey);
+  formData.append('timestamp', signData.timestamp.toString());
+  formData.append('signature', signData.signature);
+  formData.append('folder', signData.folder);
+
+  const cloudinaryRes = await fetch(
+    `https://api.cloudinary.com/v1_1/${signData.cloudName}/image/upload`,
+    { method: 'POST', body: formData }
+  );
+
+  const cloudinaryData = await cloudinaryRes.json() as CloudinaryDirectResponse;
+
+  if (!cloudinaryRes.ok) {
+    throw new Error(cloudinaryData.error?.message || 'Eroare la upload in Cloudinary');
+  }
+
+  return {
+    url: cloudinaryData.secure_url,
+    publicId: cloudinaryData.public_id,
+    width: cloudinaryData.width,
+    height: cloudinaryData.height,
+  };
 }
 
 export async function uploadMultipleImagesDirectly(

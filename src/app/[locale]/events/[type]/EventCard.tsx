@@ -11,8 +11,9 @@ const EventCard = ({ event, isActive = true }: { event: IEvent, isActive?: boole
   return (
     <div className='flex flex-col items-center gap-4'>
       <h1 className={cn(
-        'nohemi text-white text-4xl whitespace-nowrap opacity-0 transition-opacity duration-300 ease-linear',
-        isActive && 'opacity-100'
+        'nohemi text-white text-2xl text-center opacity-0 transition-opacity duration-300 ease-linear',
+        isActive && 'opacity-100',
+        'lg:text-4xl'
       )}>
         {locale === 'ro' ? event.title : event.titleTranslation}
       </h1>

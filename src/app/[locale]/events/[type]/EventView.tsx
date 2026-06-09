@@ -4,7 +4,7 @@ import { useEvents } from '@src/hooks/useEvents'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
-import { Controller, EffectCoverflow } from 'swiper/modules';
+import { EffectCoverflow } from 'swiper/modules';
 import EventCard from './EventCard';
 import { 
   IconAppsOff, IconCalendarWeekFilled, 
@@ -62,7 +62,8 @@ const EventView = ({ type }: { type: string }) => {
 
   useEffect(() => {
     console.log('activeIndex changed:', activeIndex);
-  }, [activeIndex])
+    dotsSwiper?.slideTo(activeIndex);
+  }, [activeIndex, dotsSwiper])
 
   if (!loading && !events.length) {
     return (
@@ -104,7 +105,7 @@ const EventView = ({ type }: { type: string }) => {
           effect='coverflow'
           centeredSlides
           slidesPerView={2.5}
-          modules={[EffectCoverflow, Controller]}
+          modules={[EffectCoverflow]} // Removed Controller
           coverflowEffect={{
             rotate: 30,
             stretch: 0,
@@ -112,8 +113,10 @@ const EventView = ({ type }: { type: string }) => {
             modifier: 1,
             slideShadows: false,
           }}
-          onSlideChange={(e) => setActiveIndex(e.activeIndex)}
-          controller={{ control: dotsSwiper }}
+          onSlideChange={(e) => {
+            setActiveIndex(e.activeIndex);
+            // dotsSwiper?.slideTo(e.activeIndex); // Manually sync dots
+          }}
           className={'w-full fade-edges'}
         >
           {events.map((e, i) => (
@@ -137,7 +140,7 @@ const EventView = ({ type }: { type: string }) => {
           effect='coverflow'
           centeredSlides
           slidesPerView={'auto'}
-          modules={[EffectCoverflow, Controller]}
+          modules={[EffectCoverflow]} // Removed Controller
           coverflowEffect={{
             rotate: 30,
             stretch: 0,
@@ -145,12 +148,11 @@ const EventView = ({ type }: { type: string }) => {
             modifier: 1,
             slideShadows: true,
           }}
-          onSlideChange={(e) => setActiveIndex(e.activeIndex)}
-          controller={{ control: dotsSwiper }}
-          className={cn(
-            'w-full',
-            'sm:w-4/5',
-          )}
+          onSlideChange={(e) => {
+            setActiveIndex(e.activeIndex);
+            // dotsSwiper?.slideTo(e.activeIndex); // Manually sync dots
+          }}
+          className={cn('w-full', 'sm:w-4/5')}
         >
           {events.map((e, i) => (
             <SwiperSlide
@@ -168,8 +170,7 @@ const EventView = ({ type }: { type: string }) => {
           onSwiper={setDotsSwiper}
           aria-disabled
           grabCursor
-          modules={[Controller]}
-          controller={{ control: dotsSwiper }}
+          modules={[]}
           slidesPerView={3}
           allowTouchMove={false}
           className='w-20 mx-0! bg-black/30 backdrop-blur-md rounded-full'
@@ -193,8 +194,13 @@ const EventView = ({ type }: { type: string }) => {
             activeIndex === 0 && 'opacity-30 pointer-events-none'
           )}
           onClick={() => {
-            mobileEventsSwiper?.slidePrev()
-            eventsSwiper?.slidePrev()
+            if (typeof window === 'undefined') return;
+            
+            if (window.innerWidth >= 1024) {
+              eventsSwiper?.slidePrev();
+            } else {
+              mobileEventsSwiper?.slidePrev();
+            }
           }}
         />
         <IconChevronRight

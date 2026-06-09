@@ -136,17 +136,21 @@ export default function Gallery({
   }
 
   useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        setWidth(containerRef.current.offsetWidth);
-      }
+    const measure = () => {
+      if (!containerRef.current) return;
+      setWidth(containerRef.current.getBoundingClientRect().width);
     };
 
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
+    requestAnimationFrame(() => {
+      measure();
+    });
 
-    return () => window.removeEventListener('resize', updateWidth);
-  }, []);
+    window.addEventListener('resize', measure);
+
+    return () => {
+      window.removeEventListener('resize', measure);
+    };
+  }, [photos]);
 
   if (!photos.length) {
     return (
@@ -232,57 +236,70 @@ export default function Gallery({
           )}
         </div>
       </div>
-      <div
-        ref={containerRef}
-        className={cn(
-          'relative h-100 overflow-y-scroll mt-2',
-          'sm:h-150',
-          'xl:h-200',
-          '2xl:h-250'
-        )}
-      >
-        {layout?.boxes.map((box, i) => {
-          const photo = photos[i];
-          const isSelected = selected.has(photo.publicId);
+      <div className="w-full">
+        <div
+          ref={containerRef}
+          className={cn(
+            'relative h-100 overflow-y-scroll mt-2',
+            'sm:h-150',
+            'xl:h-200',
+            '2xl:h-250'
+          )}
+        >
+          {layout?.boxes.map((box, i) => {
+            const photo = photos[i];
+            const isSelected = selected.has(photo.publicId);
 
-          return (
-            <div
-              key={photo.publicId}
-              style={{
-                position: 'absolute',
-                top: box.top,
-                left: box.left,
-                width: box.width,
-                height: box.height,
-              }}
-              onClick={() => toggle(photo.publicId)}
-              className='cursor-pointer group'
-            >
-              <Image
-                src={photo.url}
-                alt=''
-                fill
-                className={`object-cover rounded-md transition-transform duration-200 ease-in-out ${
-                  isSelected ? 'opacity-70 scale-95' : ''
-                }`}
-                onClick={(e) => {
-                  e.preventDefault()
-                  setIndex(i)
+            return (
+              <div
+                key={photo.publicId}
+                style={{
+                  position: 'absolute',
+                  top: box.top,
+                  left: box.left,
+                  width: box.width,
+                  height: box.height,
                 }}
-              />
+                onClick={() => toggle(photo.publicId)}
+                className='cursor-pointer group'
+              >
+                {/* <Image
+                  src={photo.url}
+                  alt=''
+                  fill
+                  className={`object-cover rounded-md transition-transform duration-200 ease-in-out ${
+                    isSelected ? 'opacity-70 scale-95' : ''
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setIndex(i)
+                  }}
+                /> */}
+                <Image
+                  src={photo.url}
+                  alt=''
+                  fill
+                  priority
+                  loading='eager'
+                  className={`object-cover rounded-md transition-transform duration-200 ease-in-out ${
+                    isSelected ? 'opacity-70 scale-95' : ''
+                  }`}
+                  onLoad={() => console.log('loaded', photo.publicId)}
+                />
 
-              {!isDisabled && (
-                <div className='absolute top-1 let-1 ml-2 opacity-100 group-hover:opacity-100'>
-                  {isSelected ? (
-                    <IconSquareCheck className='bg-black text-white' />
-                  ) : (
-                    <IconSquare className='text-white bg-black' />
-                  )}
-                </div>
-              )}
-            </div>
-          );
-        })}
+                {!isDisabled && (
+                  <div className='absolute top-1 let-1 ml-2 opacity-100 group-hover:opacity-100'>
+                    {isSelected ? (
+                      <IconSquareCheck className='bg-black text-white' />
+                    ) : (
+                      <IconSquare className='text-white bg-black' />
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </>
   );

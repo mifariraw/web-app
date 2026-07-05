@@ -10,7 +10,7 @@
     "concerts": "Concerts",
     "events": "Events",
     "personalProjects": "Personal Projects",
-    "potraits": "Portraits"
+    "portraits": "Portraits"
   },
   "Navbar": {
     "about": "About"
@@ -47,7 +47,7 @@
     "event": "Event",
     "concert": "Concert/Festival",
     "personal_project": "Personal Project",
-    "potraits": "Portrait",
+    "portraits": "Portrait",
     "gallery": "Gallery",
     "noPhotos": "There are no photos for this event",
     "noEvents": "There are no events for this category"

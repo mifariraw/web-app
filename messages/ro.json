@@ -10,7 +10,7 @@
     "concerts": "Concerte",
     "events": "Evenimente",
     "personalProjects": "Proiecte Personale",
-    "potraits": "Portrete"
+    "portraits": "Portrete"
   },
   "Navbar": {
     "about": "Despre"
@@ -47,7 +47,7 @@
     "event": "Eveniment",
     "concert": "Concert/Festival",
     "personal_project": "Proiect Personal",
-    "potraits": "Portret",
+    "portraits": "Portret",
     "gallery": "Galerie",
     "noPhotos": "Nu exista poze pentru acest eveniment",
     "noEvents": "Nu exista evenimente pentru aceasta categorie"

@@ -24,7 +24,7 @@ const MobileNavbar = () => {
     { label: t('about'), link: '/about' },
     { label: t('concerts'), link: '/events/concert' },
     { label: t('events'), link: '/events/event' },
-    { label: t('potraits'), link: '/events/potrait' },
+    { label: t('potraits'), link: '/events/potraits' },
     { label: t('personalProjects'), link: '/events/personal_project' },
   ];
 

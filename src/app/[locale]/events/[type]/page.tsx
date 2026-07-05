@@ -6,7 +6,7 @@ interface PageProps {
 }
 
 const EventPage = async ({ params }: PageProps) => {
-  const acceptedTypes = ['concert', 'event', 'personal_projects', 'portraits']
+  const acceptedTypes = ['concert', 'event', 'personal_project', 'portraits']
   const { type } = await params
 
   if (!acceptedTypes.includes(type)) {

@@ -32,7 +32,7 @@ const Dashboard = () => {
       <div className='mt-6' />
       <EventCategorySection 
         title='Proiecte Personale'
-        type='personal_projects'
+        type='personal_project'
       />
 
       <div className='mt-6' />

@@ -25,7 +25,7 @@ const MobileNavbar = () => {
     { label: t('concerts'), link: '/events/concert' },
     { label: t('events'), link: '/events/event' },
     { label: t('potraits'), link: '/events/potrait' },
-    { label: t('personalProjects'), link: '/events/personal_projects' },
+    { label: t('personalProjects'), link: '/events/personal_project' },
   ];
 
   if (pathname.startsWith('/admin')) {

@@ -25,8 +25,9 @@ const EventCard = ({ event }: EventCardProps) => {
         alt={event.title}
       />
       <span className={cn(
-        'font-semibold',
-        'xl:text-xl'
+        'font-semibold w-30 text-center',
+        'sm:w-40',
+        'xl:text-xl xl:w-60',
       )}>{event.title}</span>
     </Link>
   )

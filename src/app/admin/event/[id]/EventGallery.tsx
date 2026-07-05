@@ -263,7 +263,7 @@ export default function Gallery({
                 onClick={() => toggle(photo.publicId)}
                 className='cursor-pointer group'
               >
-                {/* <Image
+                <Image
                   src={photo.url}
                   alt=''
                   fill
@@ -274,17 +274,6 @@ export default function Gallery({
                     e.preventDefault()
                     setIndex(i)
                   }}
-                /> */}
-                <Image
-                  src={photo.url}
-                  alt=''
-                  fill
-                  priority
-                  loading='eager'
-                  className={`object-cover rounded-md transition-transform duration-200 ease-in-out ${
-                    isSelected ? 'opacity-70 scale-95' : ''
-                  }`}
-                  onLoad={() => console.log('loaded', photo.publicId)}
                 />
 
                 {!isDisabled && (

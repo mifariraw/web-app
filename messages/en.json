@@ -46,7 +46,7 @@
   "EventsPage": {
     "event": "Event",
     "concert": "Concert/Festival",
-    "personal_projects": "Personal Project",
+    "personal_project": "Personal Project",
     "potraits": "Portrait",
     "gallery": "Gallery",
     "noPhotos": "There are no photos for this event",
